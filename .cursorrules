@@ -1,0 +1,434 @@
+# Blog Project - Cursor Rules
+
+## Visão Geral do Projeto
+
+Este é um projeto de blog desenvolvido com Next.js 16, React 19, TypeScript, Tailwind CSS v4 e shadcn/ui. O projeto utiliza tema escuro por padrão e segue padrões modernos de desenvolvimento web.
+
+## Stack Tecnológica
+
+- **Framework**: Next.js 16.1.1 (App Router)
+- **React**: 19.2.3
+- **TypeScript**: 5.x
+- **Estilização**: Tailwind CSS v4
+- **Componentes UI**: shadcn/ui (estilo "new-york")
+- **Ícones**: lucide-react
+- **Imagens**: Next.js Image (com suporte a Unsplash)
+
+## Estrutura de Diretórios
+
+```
+blog/
+├── app/                    # Next.js App Router
+│   ├── layout.tsx         # Layout raiz com tema escuro
+│   ├── page.tsx            # Home page com grid layout
+│   └── globals.css         # Estilos globais e tema
+├── components/             # Componentes React
+│   ├── ui/                 # Componentes shadcn/ui
+│   │   ├── button.tsx      # Botão com cursor-pointer
+│   │   ├── card.tsx        # Card e subcomponentes
+│   │   └── input.tsx       # Input field
+│   ├── navbar.tsx          # Barra de navegação
+│   ├── post-card.tsx       # Card de post individual
+│   ├── popular-categories.tsx  # Categorias populares
+│   └── newsletter.tsx      # Formulário de newsletter
+├── data/                   # Dados estáticos
+│   ├── posts.ts            # Posts do blog
+│   └── categories.ts       # Categorias
+└── lib/                    # Utilitários
+    └── utils.ts            # Função cn() para classes
+```
+
+## Padrões de Componentes
+
+### 1. Exportação de Componentes
+
+**SEMPRE use `export const` para componentes customizados (não shadcn/ui):**
+
+```typescript
+// ✅ CORRETO
+export const Navbar = ({ className, ...props }: NavbarProps) => {
+  // ...
+};
+
+// ❌ ERRADO
+export function Navbar({ className, ...props }: NavbarProps) {
+  // ...
+}
+```
+
+**Componentes shadcn/ui mantêm sua estrutura original** (geralmente `export const` ou `export function` conforme o padrão do shadcn).
+
+### 2. Tipos e Props
+
+**SEMPRE use `type` (não `interface`) para props de componentes customizados:**
+
+```typescript
+// ✅ CORRETO
+type NavbarProps = {
+  isLoggedIn?: boolean;
+} & React.ComponentProps<"nav">;
+
+// ❌ ERRADO
+interface NavbarProps {
+  isLoggedIn?: boolean;
+}
+```
+
+**SEMPRE estenda `React.ComponentProps<"elemento">` para permitir props HTML nativas:**
+
+```typescript
+// Permite className, onClick, etc.
+type PostCardProps = {
+  post: Post;
+} & React.ComponentProps<"div">;
+```
+
+### 3. Client Components
+
+**SEMPRE adicione `"use client"` no topo de componentes que usam hooks ou interatividade:**
+
+```typescript
+"use client";
+
+export const Navbar = ({ ... }) => {
+  // ...
+};
+```
+
+### 4. Spread de Props
+
+**SEMPRE desestruture `className` e use spread para `...props`:**
+
+```typescript
+export const Component = ({ className, ...props }: ComponentProps) => {
+  return (
+    <div className={`base-classes ${className || ""}`} {...props}>
+      {/* ... */}
+    </div>
+  );
+};
+```
+
+## Padrões de Acessibilidade
+
+### 1. Ícones do Lucide React
+
+**NUNCA use `title` em ícones do lucide-react** (causa erro de TypeScript):
+
+```typescript
+// ✅ CORRETO
+<Search
+  className="..."
+  aria-label="Ícone de busca"
+/>
+
+// ❌ ERRADO
+<Search
+  className="..."
+  aria-label="Ícone de busca"
+  title="Buscar"  // NÃO funciona com lucide-react
+/>
+```
+
+### 2. Ícones em Botões
+
+**SEMPRE use `aria-hidden="true"` em ícones dentro de botões com texto:**
+
+```typescript
+<Button aria-label="Fazer login">
+  <LogIn className="h-4 w-4" aria-hidden="true" />
+  Fazer Login
+</Button>
+```
+
+### 3. Botões Apenas com Ícones
+
+**SEMPRE adicione `aria-label` e `title` em botões que contêm apenas ícones:**
+
+```typescript
+<Button
+  variant="ghost"
+  size="icon"
+  aria-label="Acessar perfil do usuário"
+  title="Perfil"
+>
+  <User className="h-5 w-5" aria-hidden="true" />
+</Button>
+```
+
+### 4. Campos de Formulário
+
+**SEMPRE adicione `aria-label` em inputs e use `aria-describedby` quando houver descrição:**
+
+```typescript
+<Input
+  id="newsletter-email"
+  type="email"
+  aria-label="Campo de email para newsletter"
+  aria-describedby="newsletter-description"
+/>
+<p id="newsletter-description">
+  Enviaremos apenas notificações sobre novos posts
+</p>
+```
+
+## Padrões de Estilo (Tailwind CSS)
+
+### 1. Tema Escuro
+
+**O projeto usa tema escuro por padrão** (definido em `app/layout.tsx`):
+
+```typescript
+<html lang="en" className="dark">
+```
+
+**SEMPRE forneça variantes dark: para todos os elementos:**
+
+```typescript
+className = "bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100";
+```
+
+### 2. Paleta de Cores
+
+**Cores principais do projeto:**
+
+- **Slate**: Cores base (slate-50, slate-900, slate-950)
+- **Blue**: Ações primárias (blue-500, blue-600, blue-700)
+- **Purple**: Ações secundárias e acentos (purple-400, purple-600, purple-700)
+
+**Gradientes padrão:**
+
+```typescript
+// Gradiente azul para roxo
+className = "bg-gradient-to-r from-blue-600 to-purple-600";
+
+// Gradiente diagonal
+className = "bg-gradient-to-br from-blue-500 to-purple-600";
+```
+
+### 3. Cursor Pointer
+
+**SEMPRE adicione `cursor-pointer` em elementos clicáveis:**
+
+- Botões: Já incluído no componente Button base
+- Cards clicáveis: `className="cursor-pointer ..."`
+- Itens de lista clicáveis: `className="cursor-pointer ..."`
+
+### 4. Hover Effects
+
+**SEMPRE adicione efeitos hover em elementos interativos:**
+
+```typescript
+className =
+  "transition-all duration-300 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700";
+```
+
+### 5. Transições
+
+**SEMPRE use transições suaves:**
+
+```typescript
+className = "transition-colors duration-300";
+className = "transition-transform duration-300";
+```
+
+## Estrutura de Dados
+
+### 1. Posts
+
+**Estrutura do tipo Post (`data/posts.ts`):**
+
+```typescript
+export interface Post {
+  id: string;
+  titulo: string;
+  excerpt: string;
+  conteudo: string;
+  imagemCapa: string; // URL da imagem (Unsplash)
+  categoria: string;
+  dataCriacao: Date;
+  dataAtualizacao: Date;
+  likes: number;
+}
+```
+
+### 2. Categorias
+
+**Estrutura do tipo Category (`data/categories.ts`):**
+
+```typescript
+export type Category = {
+  nome: string;
+  totalLikes: number;
+  quantidadePosts: number;
+};
+```
+
+## Layout da Home Page
+
+### Grid Layout
+
+**A home page usa grid responsivo:**
+
+```typescript
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  {/* Coluna Esquerda - Posts (2/3) */}
+  <div className="lg:col-span-2 space-y-6">{/* Posts */}</div>
+
+  {/* Coluna Direita - Sidebar (1/3) */}
+  <div className="lg:col-span-1 space-y-6">
+    <PopularCategories />
+    <Newsletter />
+  </div>
+</div>
+```
+
+## Componentes Principais
+
+### Navbar
+
+- **Props**: `isLoggedIn?: boolean` + props HTML de `<nav>`
+- **Funcionalidades**:
+  - Logo com gradiente
+  - Barra de pesquisa centralizada
+  - Botões condicionais (Perfil/Configurações se logado, Login se não logado)
+- **Tema**: Sticky, backdrop blur, bordas com slate
+
+### PostCard
+
+- **Props**: `post: Post` + props HTML de `<div>`
+- **Exibe**: Imagem de capa, categoria, título, excerto, likes
+- **Interatividade**: Hover com shadow e border color change
+
+### PopularCategories
+
+- **Props**: Props HTML de `<div>`
+- **Exibe**: Lista de categorias ordenadas por likes
+- **Interatividade**: Cards clicáveis com hover
+
+### Newsletter
+
+- **Props**: Props HTML de `<div>`
+- **Funcionalidade**: Formulário de email (design apenas, sem backend)
+- **Validação**: Ainda não implementada
+
+## Configurações Importantes
+
+### Next.js Image
+
+**Configurado em `next.config.ts` para permitir imagens do Unsplash:**
+
+```typescript
+images: {
+  remotePatterns: [
+    {
+      protocol: "https",
+      hostname: "images.unsplash.com",
+    },
+  ],
+}
+```
+
+### shadcn/ui
+
+**Configuração em `components.json`:**
+
+- Style: "new-york"
+- Base color: "slate"
+- CSS Variables: true
+- Icon library: "lucide"
+
+## Boas Práticas
+
+### 1. Imports
+
+**Organize imports em grupos:**
+
+1. React/Next.js
+2. Componentes UI (shadcn)
+3. Componentes customizados
+4. Utilitários/lib
+5. Tipos/dados
+6. Ícones
+
+```typescript
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Mail } from "lucide-react";
+```
+
+### 2. Comentários
+
+**Use comentários descritivos em português:**
+
+```typescript
+{
+  /* Logo */
+}
+{
+  /* Search Bar */
+}
+{
+  /* Actions */
+}
+{
+  /* Coluna Esquerda - Posts */
+}
+{
+  /* Coluna Direita - Sidebar */
+}
+```
+
+### 3. Nomenclatura
+
+- **Componentes**: PascalCase (`PostCard`, `Navbar`)
+- **Arquivos**: kebab-case (`post-card.tsx`, `popular-categories.tsx`)
+- **Tipos**: PascalCase (`PostCardProps`, `NavbarProps`)
+- **Variáveis/funções**: camelCase (`isLoggedIn`, `className`)
+
+### 4. Formatação
+
+**SEMPRE formate imports multi-linha:**
+
+```typescript
+// ✅ CORRETO
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+// ❌ ERRADO
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+```
+
+## Regras Específicas
+
+1. **NUNCA** use `title` em ícones do lucide-react
+2. **SEMPRE** use `export const` para componentes customizados
+3. **SEMPRE** use `type` (não `interface`) para props
+4. **SEMPRE** estenda `React.ComponentProps<"elemento">`
+5. **SEMPRE** adicione `"use client"` em componentes interativos
+6. **SEMPRE** forneça variantes `dark:` para todos os estilos
+7. **SEMPRE** adicione `cursor-pointer` em elementos clicáveis
+8. **SEMPRE** adicione `aria-label` em elementos sem texto visível
+9. **SEMPRE** use `aria-hidden="true"` em ícones decorativos dentro de botões com texto
+10. **SEMPRE** organize imports em grupos lógicos
+
+## Notas Finais
+
+- O projeto está configurado com tema escuro por padrão
+- Todas as funcionalidades de backend ainda não foram implementadas (apenas design)
+- Os dados são estáticos e estão em `data/`
+- O projeto usa TypeScript strict mode
+- Todos os componentes são responsivos e seguem mobile-first
