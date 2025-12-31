@@ -1,12 +1,12 @@
 export type Post = {
   id: string;
-  titulo: string;
+  title: string;
   excerpt: string;
   slug: string;
-  conteudo: string;
-  imagemCapa: string;
-  categoria: string;
-  dataCriacao: Date;
-  dataAtualizacao: Date;
+  content: string;
+  coverImage: string;
+  category: string;
+  createdAt: string;
+  updatedAt: string;
   likes: number;
 };

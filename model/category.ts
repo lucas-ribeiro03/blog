@@ -1,5 +1,5 @@
 export type Category = {
-  nome: string;
+  name: string;
   totalLikes: number;
   quantidadePosts: number;
   createdAt: Date;
