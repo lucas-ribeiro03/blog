@@ -2,28 +2,28 @@ import { Category } from "@/model/category";
 
 export const categories: Category[] = [
   {
-    nome: "Performance",
+    name: "Performance",
     totalLikes: 203,
     quantidadePosts: 12,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    nome: "Programação",
+    name: "Programação",
     totalLikes: 156,
     quantidadePosts: 18,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    nome: "Tecnologia",
+    name: "Tecnologia",
     totalLikes: 124,
     quantidadePosts: 15,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    nome: "Design",
+    name: "Design",
     totalLikes: 89,
     quantidadePosts: 10,
     createdAt: new Date(),
