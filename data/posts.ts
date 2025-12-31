@@ -1,19 +1,10 @@
-export interface Post {
-  id: string;
-  titulo: string;
-  excerpt: string;
-  conteudo: string;
-  imagemCapa: string;
-  categoria: string;
-  dataCriacao: Date;
-  dataAtualizacao: Date;
-  likes: number;
-}
+import { Post } from "@/model/post";
 
 export const posts: Post[] = [
   {
     id: "1",
     titulo: "Introdução ao Next.js 15: Novidades e Melhorias",
+    slug: "introducao-ao-nextjs-15-novidades-e-melhorias",
     excerpt:
       "Descubra as principais novidades do Next.js 15, incluindo melhorias de performance, novas APIs e recursos que tornam o desenvolvimento ainda mais eficiente.",
     conteudo:
@@ -28,6 +19,7 @@ export const posts: Post[] = [
   {
     id: "2",
     titulo: "Design System com Tailwind CSS e shadcn/ui",
+    slug: "design-system-com-tailwind-css-e-shadcn-ui",
     excerpt:
       "Aprenda a criar um design system robusto utilizando Tailwind CSS e shadcn/ui, criando componentes reutilizáveis e consistentes para suas aplicações.",
     conteudo:
@@ -42,6 +34,7 @@ export const posts: Post[] = [
   {
     id: "3",
     titulo: "TypeScript Avançado: Tipos Condicionais e Utility Types",
+    slug: "typescript-avancado-tipos-condicionais-e-utility-types",
     excerpt:
       "Explore os recursos avançados do TypeScript, incluindo tipos condicionais, mapped types e utility types que podem elevar sua produtividade como desenvolvedor.",
     conteudo:
@@ -56,6 +49,7 @@ export const posts: Post[] = [
   {
     id: "4",
     titulo: "Performance Web: Otimizações e Boas Práticas",
+    slug: "performance-web-otimizacoes-e-boas-praticas",
     excerpt:
       "Descubra técnicas avançadas de otimização web para melhorar o desempenho de suas aplicações, incluindo lazy loading, code splitting e otimização de imagens.",
     conteudo:
