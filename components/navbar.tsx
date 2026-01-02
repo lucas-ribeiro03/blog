@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Search, User, Settings, LogIn, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ProfileDropdown } from "./profile-dropdown";
+import { SettingsDropdown } from "./settings-dropdown";
 
 type NavbarProps = {
   isLoggedIn?: boolean;
@@ -58,26 +60,7 @@ export const Navbar = ({
           {/* Desktop: Actions */}
           <div className="hidden md:flex items-center gap-2">
             {isLoggedIn ? (
-              <>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-slate-600 hover:text-blue-600 hover:bg-blue-50 dark:text-slate-400 dark:hover:text-blue-400 dark:hover:bg-blue-950"
-                  aria-label="Acessar perfil do usuário"
-                  title="Perfil"
-                >
-                  <User className="h-5 w-5" aria-hidden="true" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-slate-600 hover:text-purple-600 hover:bg-purple-50 dark:text-slate-400 dark:hover:text-purple-400 dark:hover:bg-purple-950"
-                  aria-label="Acessar configurações"
-                  title="Configurações"
-                >
-                  <Settings className="h-5 w-5" aria-hidden="true" />
-                </Button>
-              </>
+              <ProfileDropdown />
             ) : (
               <Button
                 variant="default"
@@ -88,6 +71,7 @@ export const Navbar = ({
                 Fazer Login
               </Button>
             )}
+            <SettingsDropdown />
           </div>
 
           {/* Mobile: Menu Button */}
