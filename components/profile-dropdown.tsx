@@ -25,9 +25,9 @@ export const ProfileDropdown = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="" align="start">
-        <DropdownMenuLabel>Perfil</DropdownMenuLabel>
+        <DropdownMenuLabel className="cursor-pointer">Perfil</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Editar</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
         <DropdownMenuItem className="text-red-500">Sair</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -60,12 +60,15 @@ export const SettingsDropdown = () => {
           <DropdownMenuCheckboxItem
             checked={isDark}
             onCheckedChange={toggleDarkTheme}
+            className="cursor-pointer"
           >
             Tema claro
           </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem>Notificações</DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem className="cursor-pointer">
+            Notificações
+          </DropdownMenuCheckboxItem>
           <DropdownMenuItem
-            className="ml-6"
+            className="ml-6 cursor-pointer"
             onSelect={() => setShowLanguageDialog(true)}
           >
             Linguagem
