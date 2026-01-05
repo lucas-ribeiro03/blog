@@ -13,25 +13,40 @@ export class DrizzlePostRepository implements PostRepository {
 
     if (!post) return "Nenhum post encontrado";
 
-    return post;
+    return {
+      ...post,
+      createdAt: Number(post.createdAt),
+      updatedAt: Number(post.updatedAt),
+    };
   }
 
   async getPosts(): Promise<Post[] | string> {
     const posts = await drizzleDb.query.posts.findMany();
     if (!posts) return "Não há posts criados ainda";
 
-    return posts;
+    const postsWithCreatedAtAndUpdatedAt = posts.map((post) => ({
+      ...post,
+      createdAt: Number(post.createdAt),
+      updatedAt: Number(post.updatedAt),
+    }));
+
+    return postsWithCreatedAtAndUpdatedAt;
   }
 
   async getPostsByCategory(category: string): Promise<Post[] | string> {
     if (!category) return "Categoria não recebida";
 
     const posts = await drizzleDb.query.posts.findMany({
-      where: eq(postsTable.category, category),
+      where: eq(postsTable.categoryId, category),
     });
 
     if (!posts) return "Nenhum post encontrado";
-    return posts;
+    const postsWithCreatedAtAndUpdatedAt = posts.map((post) => ({
+      ...post,
+      createdAt: Number(post.createdAt),
+      updatedAt: Number(post.updatedAt),
+    }));
+    return postsWithCreatedAtAndUpdatedAt;
   }
 
   async getPostById(id: string): Promise<Post | string> {
@@ -42,13 +57,22 @@ export class DrizzlePostRepository implements PostRepository {
 
     if (!posts) return "Nenhum post encontrado";
 
-    return posts;
+    return {
+      ...posts,
+      createdAt: Number(posts.createdAt),
+      updatedAt: Number(posts.updatedAt),
+    };
   }
 
   async createPost(post: Post): Promise<void> {
     if (!post) throw new Error("Post não recebido");
+    const newPost = {
+      ...post,
+      createdAt: new Date(post.createdAt),
+      updatedAt: new Date(post.updatedAt),
+    };
     try {
-      await drizzleDb.insert(postsTable).values(post);
+      await drizzleDb.insert(postsTable).values(newPost);
     } catch (e) {
       throw new Error(`Erro: ${e}`);
     }
@@ -66,11 +90,12 @@ export class DrizzlePostRepository implements PostRepository {
   async updatePost(post: Post): Promise<void> {
     if (!post) throw new Error("Post não recebido");
 
-    const updatedAt = new Date().toISOString();
+    const updatedAt = new Date();
 
     const newPost = {
       ...post,
       updatedAt,
+      createdAt: new Date(post.createdAt),
     };
 
     await drizzleDb
