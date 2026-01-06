@@ -36,7 +36,7 @@ export const SettingsDropdown = () => {
   const toggleDarkTheme = () => {
     const newValue = !isDark;
     setIsDark(newValue);
-    localStorage.setItem("dark", newValue ? "dark" : "light");
+    localStorage.setItem("theme", newValue ? "dark" : "light");
     document.documentElement.classList.toggle("dark", newValue);
   };
 
@@ -62,7 +62,7 @@ export const SettingsDropdown = () => {
             onCheckedChange={toggleDarkTheme}
             className="cursor-pointer"
           >
-            Tema claro
+            Tema escuro
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem className="cursor-pointer">
             Notificações
