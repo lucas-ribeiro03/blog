@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Search, User, Settings, LogIn, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,11 +12,7 @@ type NavbarProps = {
   isLoggedIn?: boolean;
 } & React.ComponentProps<"nav">;
 
-export const Navbar = ({
-  isLoggedIn = false,
-  className,
-  ...props
-}: NavbarProps) => {
+export const Navbar = ({ isLoggedIn, className, ...props }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -60,18 +57,23 @@ export const Navbar = ({
           {/* Desktop: Actions */}
           <div className="hidden md:flex items-center gap-2">
             {isLoggedIn ? (
-              <ProfileDropdown />
+              <>
+                <ProfileDropdown />
+                <SettingsDropdown />
+              </>
             ) : (
               <Button
+                asChild
                 variant="default"
                 className="bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 aria-label="Fazer login na plataforma"
               >
-                <LogIn className="h-4 w-4" aria-hidden="true" />
-                Fazer Login
+                <Link href="/login" className="flex items-center gap-2">
+                  <LogIn className="h-4 w-4" aria-hidden="true" />
+                  Fazer Login
+                </Link>
               </Button>
             )}
-            <SettingsDropdown />
           </div>
 
           {/* Mobile: Menu Button */}
@@ -148,12 +150,18 @@ export const Navbar = ({
                 </>
               ) : (
                 <Button
+                  asChild
                   variant="default"
                   className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                   aria-label="Fazer login na plataforma"
                 >
-                  <LogIn className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Fazer Login
+                  <Link
+                    href="/login"
+                    className="flex items-center justify-center"
+                  >
+                    <LogIn className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Fazer Login
+                  </Link>
                 </Button>
               )}
             </div>
