@@ -2,7 +2,6 @@
 
 import { createLoginSession } from "@/utils/manage-login";
 import { verifyPassword } from "@/utils/verifyPassword";
-import { redirect } from "next/navigation";
 import z from "zod";
 
 const loginSchema = z.object({
