@@ -1,5 +1,6 @@
-import { SignJWT } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 type JwtPayload = {
   sub: string;
@@ -29,4 +30,28 @@ export const createLoginSession = async (userInfo: JwtPayload) => {
     sameSite: "strict",
     secure: true,
   });
+};
+
+export const verifyLogin = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("loginSession")?.value;
+  console.log(token);
+  if (!token) return null;
+
+  try {
+    const jwtPayload = await jwtVerify(token, jwtEncodeKey, {
+      algorithms: ["HS256"],
+    });
+
+    if (!jwtPayload) {
+      redirect("/login");
+    }
+
+    const { payload } = jwtPayload;
+
+    return { isLogged: true, payload };
+  } catch (e) {
+    console.log("Erro ao verificar sessão: ", e);
+    return null;
+  }
 };
