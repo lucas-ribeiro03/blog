@@ -3,7 +3,6 @@
 import { verifyUsername } from "@/utils/verifyUsername";
 import { userRepository } from "@/repositories/users";
 import z from "zod";
-import { v4 as uuidV4 } from "uuid";
 
 type ActionStateProps = {
   success: boolean;
