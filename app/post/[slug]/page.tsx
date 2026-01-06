@@ -1,4 +1,4 @@
-import { postRepository } from "@/repositories";
+import { postRepository } from "@/repositories/post";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SinglePost } from "@/components/single-post";
