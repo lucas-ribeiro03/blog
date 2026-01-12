@@ -11,10 +11,10 @@ export const posts: Post[] = [
       "O Next.js 15 trouxe diversas melhorias significativas para a comunidade de desenvolvedores React. Neste artigo, vamos explorar as principais novidades, incluindo melhorias de performance, novas APIs e recursos que tornam o desenvolvimento ainda mais eficiente. Vamos mergulhar em detalhes sobre Server Components, Streaming SSR e muito mais.",
     coverImage:
       "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=400&fit=crop",
-    category: "Tecnologia",
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-20",
-    likes: 124,
+    categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
+    authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   },
   {
     id: "2",
@@ -26,10 +26,10 @@ export const posts: Post[] = [
       "Criar um design system consistente é fundamental para o sucesso de qualquer projeto. Neste guia completo, vamos explorar como utilizar Tailwind CSS em conjunto com shadcn/ui para criar componentes reutilizáveis, acessíveis e visualmente atraentes. Vamos cobrir desde a configuração inicial até a criação de componentes complexos.",
     coverImage:
       "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=400&fit=crop",
-    category: "Design",
-    createdAt: "2024-01-10",
-    updatedAt: "2024-01-12",
-    likes: 89,
+    categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
+    authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   },
   {
     id: "3",
@@ -41,10 +41,10 @@ export const posts: Post[] = [
       "TypeScript oferece recursos poderosos que vão muito além dos tipos básicos. Neste artigo avançado, vamos mergulhar em tipos condicionais, mapped types, template literal types e utility types. Esses recursos permitem criar tipos complexos e seguros que se adaptam dinamicamente às suas necessidades.",
     coverImage:
       "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&h=400&fit=crop",
-    category: "Programação",
-    createdAt: "2024-01-05",
-    updatedAt: "2024-01-08",
-    likes: 156,
+    categoryId: "db60a3b9-b601-4fce-a0b7-bb57d9db3e93",
+    authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   },
   {
     id: "4",
@@ -56,9 +56,9 @@ export const posts: Post[] = [
       "Performance é um dos fatores mais importantes para o sucesso de uma aplicação web. Neste guia completo, vamos explorar técnicas avançadas de otimização, incluindo lazy loading de componentes, code splitting, otimização de imagens, caching strategies e muito mais. Aprenda a identificar gargalos de performance e como resolvê-los efetivamente.",
     coverImage:
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop",
-    category: "Performance",
-    createdAt: "2024-01-01",
-    updatedAt: "2024-01-03",
-    likes: 203,
+    categoryId: "2f721914-7fdf-4114-a637-abc8fbdbfcb7",
+    authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   },
 ];
