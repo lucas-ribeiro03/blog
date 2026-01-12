@@ -3,6 +3,9 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SinglePost } from "@/components/single-post";
 import { Navbar } from "@/components/navbar";
+import { drizzleDb } from "@/db";
+import { eq } from "drizzle-orm";
+import { categoriesTable } from "@/db/schemas";
 
 type PostPageProps = {
   params: Promise<{ slug: string }>;
@@ -31,6 +34,11 @@ export default async function PostPage({ params }: PostPageProps) {
   const post = await postRepository.getPostBySlug(slug);
 
   if (typeof post === "string") notFound();
+  const category = await drizzleDb.query.categories.findFirst({
+    where: eq(categoriesTable.id, post.categoryId),
+  });
+
+  if (!category) return;
 
   // Por padrão, usuário não está logado
   const isLoggedIn = true;
@@ -39,7 +47,7 @@ export default async function PostPage({ params }: PostPageProps) {
     <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
       <Navbar isLoggedIn={isLoggedIn} />
       <main className="container mx-auto px-4 py-12">
-        <SinglePost post={post} />
+        <SinglePost post={post} category={category.name} />
       </main>
     </div>
   );
