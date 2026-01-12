@@ -1,9 +1,8 @@
 import { Navbar } from "@/components/navbar";
-import { PostCard } from "@/components/post-card";
 import { PopularCategories } from "@/components/popular-categories";
 import { Newsletter } from "@/components/newsletter";
-import { posts } from "@/data/posts";
 import { verifyLogin } from "@/utils/manage-login";
+import { PostList } from "@/components/post-list";
 
 export default async function Home() {
   const isLogged = await verifyLogin();
@@ -25,9 +24,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Coluna Esquerda - Posts */}
           <div className="lg:col-span-2 space-y-6">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
+            <PostList />
           </div>
 
           {/* Coluna Direita - Sidebar */}
