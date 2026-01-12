@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { LayoutDashboard } from "lucide-react"; // Usando um ícone genérico como logo
 
 /**
  * Navbar para a seção de administração.
