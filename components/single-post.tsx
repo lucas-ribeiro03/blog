@@ -17,7 +17,7 @@ export const SinglePost = ({
   category,
   ...props
 }: SinglePostProps) => {
-  // const [likes, setLikes] = useState(post.likes);
+  //TO DO  const [likes, setLikes] = useState(post.likes);
   const [isLiked, setIsLiked] = useState(false);
 
   // const handleLike = () => {
