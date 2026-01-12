@@ -49,7 +49,7 @@ export async function loginUserAction(
     }
 
     const id = verify.id;
-    await createLoginSession({ role: "user", username, sub: id });
+    await createLoginSession({ role: verify.role, username, sub: id });
     return {
       success: true,
       message: "Login realizado",
