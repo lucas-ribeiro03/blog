@@ -1,31 +1,28 @@
 import { Category } from "@/model/category";
+import { v4 } from "uuid";
 
 export const categories: Category[] = [
   {
+    id: v4(),
     name: "Performance",
-    totalLikes: 203,
-    quantidadePosts: 12,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
     name: "Programação",
-    totalLikes: 156,
-    quantidadePosts: 18,
+    id: v4(),
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
     name: "Tecnologia",
-    totalLikes: 124,
-    quantidadePosts: 15,
+    id: v4(),
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
     name: "Design",
-    totalLikes: 89,
-    quantidadePosts: 10,
+    id: v4(),
     createdAt: new Date(),
     updatedAt: new Date(),
   },
