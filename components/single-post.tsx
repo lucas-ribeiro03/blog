@@ -8,24 +8,30 @@ import { useState } from "react";
 
 type SinglePostProps = {
   post: Post;
+  category: string;
 } & React.ComponentProps<"article">;
 
-export const SinglePost = ({ post, className, ...props }: SinglePostProps) => {
-  const [likes, setLikes] = useState(post.likes);
+export const SinglePost = ({
+  post,
+  className,
+  category,
+  ...props
+}: SinglePostProps) => {
+  // const [likes, setLikes] = useState(post.likes);
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikes((prev) => prev - 1);
-      setIsLiked(false);
-    } else {
-      setLikes((prev) => prev + 1);
-      setIsLiked(true);
-    }
-  };
+  // const handleLike = () => {
+  //   if (isLiked) {
+  //     setLikes((prev) => prev - 1);
+  //     setIsLiked(false);
+  //   } else {
+  //     setLikes((prev) => prev + 1);
+  //     setIsLiked(true);
+  //   }
+  // };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (rawDate: number) => {
+    const date = new Date(rawDate);
     return new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "long",
@@ -41,10 +47,10 @@ export const SinglePost = ({ post, className, ...props }: SinglePostProps) => {
       {/* Categoria e Data */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <span className="text-sm font-medium px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-          {post.category}
+          {category}
         </span>
         <time
-          dateTime={post.createdAt}
+          dateTime={String(post.createdAt)}
           className="text-sm text-slate-600 dark:text-slate-400"
         >
           {formatDate(post.createdAt)}
@@ -83,7 +89,7 @@ export const SinglePost = ({ post, className, ...props }: SinglePostProps) => {
       <div className="flex items-center gap-4 pt-6 border-t border-slate-200 dark:border-slate-800">
         <Button
           variant="outline"
-          onClick={handleLike}
+          // onClick={handleLike}
           className="flex items-center gap-2"
           aria-label={isLiked ? "Descurtir post" : "Curtir post"}
         >
@@ -103,7 +109,7 @@ export const SinglePost = ({ post, className, ...props }: SinglePostProps) => {
             aria-label="Ícone de curtida"
           />
           <span className="text-sm font-medium">
-            {likes} {likes === 1 ? "curtida" : "curtidas"}
+            {/* {likes} {likes === 1 ? "curtida" : "curtidas"} */}
           </span>
         </div>
       </div>
