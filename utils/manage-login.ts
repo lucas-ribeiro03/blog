@@ -1,4 +1,4 @@
-import { SignJWT, jwtVerify } from "jose";
+import { JWTPayload, JWTVerifyResult, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -7,6 +7,11 @@ type JwtPayload = {
   username: string;
   role: string;
 };
+
+type VerifyLoginReturn = Promise<{
+  isLogged: boolean;
+  payload: JWTPayload;
+}>;
 
 const jwtEncodeKey = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -32,11 +37,10 @@ export const createLoginSession = async (userInfo: JwtPayload) => {
   });
 };
 
-export const verifyLogin = async () => {
+export const verifyLogin = async (): VerifyLoginReturn => {
   const cookieStore = await cookies();
   const token = cookieStore.get("loginSession")?.value;
-  console.log(token);
-  if (!token) return null;
+  if (!token) redirect("/login");
 
   try {
     const jwtPayload = await jwtVerify(token, jwtEncodeKey, {
@@ -51,7 +55,7 @@ export const verifyLogin = async () => {
 
     return { isLogged: true, payload };
   } catch (e) {
-    console.log("Erro ao verificar sessão: ", e);
-    return null;
+    console.log(e);
+    throw new Error("Erro inesperado, tente novamente mais tarde");
   }
 };
