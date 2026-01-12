@@ -25,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { categories } from "@/data/categories";
-import { v4 as uuidv4 } from "uuid";
 import { ToastContainer } from "react-toastify";
 import createPostAction from "@/actions/postActions/create-post-action";
 
@@ -69,7 +68,6 @@ const categoriesWithIds = categories.map((cat) => ({
 }));
 
 export const CreatePostForm = () => {
-  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [coverImageUrl, setCoverImageUrl] = useState<string>("");
   const form = useForm<CreatePostFormData>({
     resolver: zodResolver(createPostSchema),
@@ -105,17 +103,15 @@ export const CreatePostForm = () => {
   };
 
   const handleImageChange = (file: File | null) => {
-    setCoverImageFile(file);
     setValue("coverImage", file as File, { shouldValidate: true });
   };
 
   const handleImageUrl = (url: string) => {
-    setCoverImageUrl(url);
     setValue("coverImageUrl", url, { shouldValidate: true });
   };
 
   const handleImageRemove = () => {
-    setCoverImageFile(null);
+    setCoverImageUrl("");
   };
 
   return (
