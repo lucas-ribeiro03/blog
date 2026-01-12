@@ -8,9 +8,13 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { User } from "lucide-react";
+import logoutAction from "@/actions/AuthActions/logout-action";
 
 export const ProfileDropdown = () => {
-  console.log("oia");
+  const handleLogout = async () => {
+    await logoutAction();
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,7 +32,9 @@ export const ProfileDropdown = () => {
         <DropdownMenuLabel className="cursor-pointer">Perfil</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
-        <DropdownMenuItem className="text-red-500">Sair</DropdownMenuItem>
+        <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
+          Sair
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
