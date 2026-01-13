@@ -6,6 +6,8 @@ import { Navbar } from "@/components/navbar";
 import { drizzleDb } from "@/db";
 import { eq } from "drizzle-orm";
 import { categoriesTable } from "@/db/schemas";
+import { getPost } from "@/lib/queries/public";
+import { Suspense } from "react";
 
 type PostPageProps = {
   params: Promise<{ slug: string }>;
@@ -15,7 +17,7 @@ export async function generateMetadata({
   params,
 }: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await postRepository.getPostBySlug(slug);
+  const post = await getPost(slug);
 
   if (typeof post === "string") {
     return {
@@ -29,26 +31,24 @@ export async function generateMetadata({
   };
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export const PostPageInner = async ({ params }: PostPageProps) => {
   const { slug } = await params;
-  const post = await postRepository.getPostBySlug(slug);
+  const post = await getPost(slug);
+  if (typeof post !== "string")
+    return (
+      <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
+        <Navbar />
+        <main className="container mx-auto px-4 py-12">
+          <SinglePost post={post} category={post.category || ""} />
+        </main>
+      </div>
+    );
+};
 
-  if (typeof post === "string") notFound();
-  const category = await drizzleDb.query.categories.findFirst({
-    where: eq(categoriesTable.id, post.categoryId),
-  });
-
-  if (!category) return;
-
-  // Por padrão, usuário não está logado
-  const isLoggedIn = true;
-
+export default async function PostPage({ params }: PostPageProps) {
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
-      <Navbar isLoggedIn={isLoggedIn} />
-      <main className="container mx-auto px-4 py-12">
-        <SinglePost post={post} category={category.name} />
-      </main>
-    </div>
+    <Suspense fallback={<p>Carregando...</p>}>
+      <PostPageInner params={params} />
+    </Suspense>
   );
 }
