@@ -5,11 +5,9 @@ import { verifyLogin } from "@/utils/manage-login";
 import { PostList } from "@/components/post-list";
 
 export default async function Home() {
-  const isLogged = await verifyLogin();
-
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
-      <Navbar isLoggedIn={isLogged ? true : false} />
+      <Navbar />
 
       <main className="container mx-auto px-4 py-12">
         <div className="mb-12 text-center">
