@@ -1,7 +1,7 @@
 import { Post } from "@/model/post";
 import { PostRepository } from "./post-repository";
-import { eq } from "drizzle-orm";
-import { postsTable } from "@/db/schemas";
+import { eq, sql } from "drizzle-orm";
+import { categoriesTable, postsTable, usersTable } from "@/db/schemas";
 import { drizzleDb } from "@/db";
 
 export class DrizzlePostRepository implements PostRepository {
@@ -21,7 +21,31 @@ export class DrizzlePostRepository implements PostRepository {
   }
 
   async getPosts(): Promise<Post[] | string> {
-    const posts = await drizzleDb.query.posts.findMany();
+    const posts = await drizzleDb
+      .select({
+        id: postsTable.id,
+        title: postsTable.title,
+        content: postsTable.content,
+        excerpt: postsTable.excerpt,
+        slug: postsTable.slug,
+        coverImage: postsTable.coverImage,
+        categoryId: postsTable.categoryId,
+        authorId: postsTable.authorId,
+        createdAt: postsTable.createdAt,
+        updatedAt: postsTable.updatedAt,
+        author: sql<string>`
+        CAST(${usersTable.name} AS TEXT) 
+        || ' ' || 
+        CAST(${usersTable.lastName} AS TEXT)
+      `.as("author"),
+        category: categoriesTable.name,
+      })
+      .from(postsTable)
+      .innerJoin(usersTable, eq(usersTable.id, postsTable.authorId))
+      .innerJoin(
+        categoriesTable,
+        eq(categoriesTable.id, postsTable.categoryId)
+      );
     if (!posts) return "Não há posts criados ainda";
 
     const postsWithCreatedAtAndUpdatedAt = posts.map((post) => ({
