@@ -9,4 +9,6 @@ export type Post = {
   authorId: string;
   createdAt: number;
   updatedAt: number;
+  author?: string;
+  category?: string;
 };
