@@ -7,16 +7,37 @@ import { drizzleDb } from "@/db";
 export class DrizzlePostRepository implements PostRepository {
   async getPostBySlug(slug: string): Promise<Post | string> {
     if (!slug) return "Slug não recebida";
-    const post = await drizzleDb.query.posts.findFirst({
-      where: eq(postsTable.slug, slug),
-    });
+    const post = await drizzleDb
+      .select({
+        id: postsTable.id,
+        title: postsTable.title,
+        content: postsTable.content,
+        excerpt: postsTable.excerpt,
+        slug: postsTable.slug,
+        coverImage: postsTable.coverImage,
+        categoryId: postsTable.categoryId,
+        authorId: postsTable.authorId,
+        createdAt: postsTable.createdAt,
+        updatedAt: postsTable.updatedAt,
+        author: sql<string>`
+        CAST(${usersTable.name} AS TEXT)
+        || ' ' ||
+        CAST(${usersTable.lastName} AS TEXT)
+      `.as("author"),
+        category: categoriesTable.name,
+      })
+      .from(postsTable)
+      .innerJoin(usersTable, eq(usersTable.id, postsTable.authorId))
+      .innerJoin(categoriesTable, eq(categoriesTable.id, postsTable.categoryId))
+      .where(eq(postsTable.slug, slug))
+      .limit(1);
 
-    if (!post) return "Nenhum post encontrado";
+    if (!post || post.length === 0) return "Nenhum post encontrado";
 
     return {
-      ...post,
-      createdAt: Number(post.createdAt),
-      updatedAt: Number(post.updatedAt),
+      ...post[0],
+      createdAt: Number(post[0].createdAt),
+      updatedAt: Number(post[0].updatedAt),
     };
   }
 
@@ -60,31 +81,74 @@ export class DrizzlePostRepository implements PostRepository {
   async getPostsByCategory(category: string): Promise<Post[] | string> {
     if (!category) return "Categoria não recebida";
 
-    const posts = await drizzleDb.query.posts.findMany({
-      where: eq(postsTable.categoryId, category),
-    });
+    const posts = await drizzleDb
+      .select({
+        id: postsTable.id,
+        title: postsTable.title,
+        content: postsTable.content,
+        excerpt: postsTable.excerpt,
+        slug: postsTable.slug,
+        coverImage: postsTable.coverImage,
+        categoryId: postsTable.categoryId,
+        authorId: postsTable.authorId,
+        createdAt: postsTable.createdAt,
+        updatedAt: postsTable.updatedAt,
+        author: sql<string>`
+        CAST(${usersTable.name} AS TEXT)
+        || ' ' ||
+        CAST(${usersTable.lastName} AS TEXT)
+      `.as("author"),
+        category: categoriesTable.name,
+      })
+      .from(postsTable)
+      .innerJoin(usersTable, eq(usersTable.id, postsTable.authorId))
+      .innerJoin(categoriesTable, eq(categoriesTable.id, postsTable.categoryId))
+      .where(eq(categoriesTable.name, category));
 
     if (!posts) return "Nenhum post encontrado";
+
     const postsWithCreatedAtAndUpdatedAt = posts.map((post) => ({
       ...post,
       createdAt: Number(post.createdAt),
       updatedAt: Number(post.updatedAt),
     }));
+
     return postsWithCreatedAtAndUpdatedAt;
   }
 
   async getPostById(id: string): Promise<Post | string> {
     if (!id) return "Id não recebido";
-    const posts = await drizzleDb.query.posts.findFirst({
-      where: eq(postsTable.id, id),
-    });
+    const post = await drizzleDb
+      .select({
+        id: postsTable.id,
+        title: postsTable.title,
+        content: postsTable.content,
+        excerpt: postsTable.excerpt,
+        slug: postsTable.slug,
+        coverImage: postsTable.coverImage,
+        categoryId: postsTable.categoryId,
+        authorId: postsTable.authorId,
+        createdAt: postsTable.createdAt,
+        updatedAt: postsTable.updatedAt,
+        author: sql<string>`
+        CAST(${usersTable.name} AS TEXT)
+        || ' ' ||
+        CAST(${usersTable.lastName} AS TEXT)
+      `.as("author"),
+        category: categoriesTable.name,
+      })
+      .from(postsTable)
+      .innerJoin(usersTable, eq(usersTable.id, postsTable.authorId))
+      .innerJoin(categoriesTable, eq(categoriesTable.id, postsTable.categoryId))
+      .where(eq(postsTable.id, id))
+      .limit(1);
 
-    if (!posts) return "Nenhum post encontrado";
+    if (!post || post.length === 0) return "Nenhum post encontrado";
 
     return {
-      ...posts,
-      createdAt: Number(posts.createdAt),
-      updatedAt: Number(posts.updatedAt),
+      ...post[0],
+      createdAt: Number(post[0].createdAt),
+      updatedAt: Number(post[0].updatedAt),
     };
   }
 
