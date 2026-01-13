@@ -1,11 +1,6 @@
-import { postRepository } from "@/repositories/post";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { SinglePost } from "@/components/single-post";
 import { Navbar } from "@/components/navbar";
-import { drizzleDb } from "@/db";
-import { eq } from "drizzle-orm";
-import { categoriesTable } from "@/db/schemas";
 import { getPost } from "@/lib/queries/public";
 import { Suspense } from "react";
 
