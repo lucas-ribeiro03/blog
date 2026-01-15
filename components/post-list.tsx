@@ -8,14 +8,7 @@ export const PostList = async () => {
     return (
       <div className="space-y-6">
         {posts.map((post) => {
-          return (
-            <PostCard
-              key={post.id}
-              post={post}
-              category={post.category ? post.category : ""}
-              author={post.author ? post.author : ""}
-            />
-          );
+          return <PostCard key={post.id} post={post} />;
         })}
       </div>
     );
