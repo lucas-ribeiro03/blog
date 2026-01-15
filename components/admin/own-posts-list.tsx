@@ -6,6 +6,8 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Plus, FileText, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Post } from "@/model/post";
+import { useEffect, useState } from "react";
+import { ConfirmationDialog } from "../confirmation-dialog";
 
 type OwnPostsListProps = {
   posts: Post[];
@@ -16,6 +18,9 @@ export const OwnPostsList = ({
   className,
   ...props
 }: OwnPostsListProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [postId, setPostId] = useState<string>("");
+
   return (
     <div className={`space-y-8 ${className || ""}`} {...props}>
       {/* Header Section */}
@@ -45,8 +50,6 @@ export const OwnPostsList = ({
           </Card>
         </div>
       </div>
-
-      {/* Action Button */}
       <div className="flex justify-center">
         <Button className="bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
           <Link href="/admin/posts/new" className="flex items-center gap-2">
@@ -56,7 +59,6 @@ export const OwnPostsList = ({
         </Button>
       </div>
 
-      {/* Posts Grid */}
       {posts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
@@ -85,6 +87,10 @@ export const OwnPostsList = ({
                   className="h-8 w-8 p-0"
                   title="Excluir post"
                   aria-label="Excluir post"
+                  onClick={() => {
+                    setIsDialogOpen(true);
+                    setPostId(post.id);
+                  }}
                 >
                   <Trash2 className="h-4 w-4" aria-hidden="true" />
                 </Button>
@@ -117,6 +123,11 @@ export const OwnPostsList = ({
           </CardContent>
         </Card>
       )}
+      <ConfirmationDialog
+        isDialogOpen={isDialogOpen}
+        closeDialog={() => setIsDialogOpen(false)}
+        id={postId}
+      />
     </div>
   );
 };
