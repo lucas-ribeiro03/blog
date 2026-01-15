@@ -208,8 +208,12 @@ export class DrizzlePostRepository implements PostRepository {
 
   async deletePost(id: string): Promise<void> {
     if (!id) throw new Error(`Id não recebido`);
+    console.log("post");
     try {
-      await drizzleDb.delete(postsTable).where(eq(postsTable.id, id));
+      const post = await drizzleDb
+        .delete(postsTable)
+        .where(eq(postsTable.id, id));
+      console.log(post);
     } catch (e) {
       throw new Error(`Erro: ${e}`);
     }
