@@ -1,3 +1,4 @@
+"use client";
 import { Post } from "@/model/post";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
