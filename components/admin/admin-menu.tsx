@@ -18,7 +18,7 @@ export const AdminMenu = ({ className, ...props }: AdminMenuProps) => {
     {
       title: "Meus Posts",
       description: "Ver todos os posts criados por você",
-      href: "/admin/posts",
+      href: "/admin/posts/own",
       icon: FileText,
       color: "text-blue-600 dark:text-blue-400",
     },
