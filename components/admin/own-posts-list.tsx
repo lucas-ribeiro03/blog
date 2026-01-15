@@ -65,19 +65,20 @@ export const OwnPostsList = ({
 
               {/* Admin Actions - Only visible on hover */}
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-1 z-10">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="h-8 w-8 p-0 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900 border border-slate-300 dark:border-slate-600"
-                  title="Editar post"
-                  aria-label="Editar post"
-                >
-                  <Edit
-                    className="h-4 w-4 text-blue-600 dark:text-blue-400"
-                    aria-hidden="true"
-                  />
-                </Button>
-
+                <Link href={`/admin/posts/update/${post.id}`}>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="h-8 w-8 p-0 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900 border border-slate-300 dark:border-slate-600"
+                    title="Editar post"
+                    aria-label="Editar post"
+                  >
+                    <Edit
+                      className="h-4 w-4 text-blue-600 dark:text-blue-400"
+                      aria-hidden="true"
+                    />
+                  </Button>
+                </Link>
                 <Button
                   size="sm"
                   variant="destructive"
