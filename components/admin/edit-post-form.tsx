@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FileText } from "lucide-react";
+import { Pen } from "lucide-react";
 import { categories } from "@/data/categories";
 
 const editPostSchema = z.object({
@@ -250,8 +250,8 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
               </div>
             ) : (
               <>
-                <FileText className="h-4 w-4 mr-2" aria-hidden="true" />
-                Criar Post
+                <Pen className="h-4 w-4 mr-2" aria-hidden="true" />
+                Editar Post
               </>
             )}
           </Button>
