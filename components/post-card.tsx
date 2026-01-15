@@ -13,17 +13,9 @@ import Link from "next/link";
 
 type PostCardProps = {
   post: Post;
-  category: string;
-  author: string;
 } & React.ComponentProps<"div">;
 
-export const PostCard = ({
-  post,
-  category,
-  author,
-  className,
-  ...props
-}: PostCardProps) => {
+export const PostCard = ({ post, className, ...props }: PostCardProps) => {
   return (
     <Link href={`/post/${post.slug}`} className="block">
       <Card
@@ -43,7 +35,7 @@ export const PostCard = ({
         <CardHeader>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-              {category}
+              {post.category}
             </span>
             <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
               <Heart
@@ -57,7 +49,7 @@ export const PostCard = ({
             {post.title}
           </CardTitle>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-            Por {author}
+            Por {post.author}
           </p>
           <CardDescription className="text-slate-600 dark:text-slate-400 line-clamp-2">
             {post.excerpt}
