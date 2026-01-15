@@ -1,7 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import { PopularCategories } from "@/components/popular-categories";
 import { Newsletter } from "@/components/newsletter";
-import { verifyLogin } from "@/utils/manage-login";
 import { PostList } from "@/components/post-list";
 
 export default async function Home() {
