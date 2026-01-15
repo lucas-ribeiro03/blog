@@ -152,6 +152,46 @@ export class DrizzlePostRepository implements PostRepository {
     };
   }
 
+  async getPostByAuthor(authorId: string): Promise<Post[]> {
+    const post = await drizzleDb
+      .select({
+        id: postsTable.id,
+        title: postsTable.title,
+        content: postsTable.content,
+        excerpt: postsTable.excerpt,
+        slug: postsTable.slug,
+        coverImage: postsTable.coverImage,
+        categoryId: postsTable.categoryId,
+        authorId: postsTable.authorId,
+        createdAt: postsTable.createdAt,
+        updatedAt: postsTable.updatedAt,
+        author: sql<string>`
+      CAST(${usersTable.name} AS TEXT)
+      || ' ' ||
+      CAST(${usersTable.lastName} AS TEXT)
+    `.as("author"),
+        category: categoriesTable.name,
+      })
+      .from(postsTable)
+      .innerJoin(usersTable, eq(postsTable.authorId, usersTable.id))
+      .innerJoin(
+        categoriesTable,
+        eq(categoriesTable.id, postsTable.categoryId)
+      );
+
+    if (!post) throw new Error("Nenhum post encontrado");
+
+    const postsWithDateFormatted = post.map((post) => {
+      return {
+        ...post,
+        createdAt: Number(post.createdAt),
+        updatedAt: Number(post.updatedAt),
+      };
+    });
+
+    return postsWithDateFormatted;
+  }
+
   async createPost(post: Post): Promise<void> {
     if (!post) throw new Error("Post não recebido");
     const newPost = {
