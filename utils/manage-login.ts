@@ -40,7 +40,7 @@ export const createLoginSession = async (userInfo: JwtPayload) => {
 export const verifyLogin = async (): VerifyLoginReturn => {
   const cookieStore = await cookies();
   const token = cookieStore.get("loginSession")?.value;
-  if (!token) redirect("/login");
+  if (!token) throw new Error("Usuário não está logado");
 
   try {
     const jwtPayload = await jwtVerify(token, jwtEncodeKey, {
@@ -48,7 +48,7 @@ export const verifyLogin = async (): VerifyLoginReturn => {
     });
 
     if (!jwtPayload) {
-      redirect("/login");
+      throw new Error("Erro na autenticação do usuário");
     }
 
     const { payload } = jwtPayload;
