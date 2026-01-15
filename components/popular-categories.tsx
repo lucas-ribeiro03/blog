@@ -46,7 +46,7 @@ export const PopularCategories = ({
                     {category.name}
                   </p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {category.quantidadePosts} posts
+                    post
                   </p>
                 </div>
               </div>
@@ -55,9 +55,7 @@ export const PopularCategories = ({
                   className="h-4 w-4 fill-red-500 text-red-500"
                   aria-label="Total de curtidas"
                 />
-                <span className="text-sm font-semibold">
-                  {category.totalLikes}
-                </span>
+                <span className="text-sm font-semibold">total</span>
               </div>
             </div>
           ))}
