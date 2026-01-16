@@ -45,7 +45,7 @@ export const PostCard = ({ post, className, ...props }: PostCardProps) => {
               {/* <span className="text-sm font-medium">{post.likes}</span> */}
             </div>
           </div>
-          <CardTitle className="text-xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+          <CardTitle className="text-xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 min-h-14">
             {post.title}
           </CardTitle>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
