@@ -56,9 +56,9 @@ const editPostSchema = z.object({
           file.type
         ),
       "Formato de imagem inválido. Use JPEG, PNG, GIF ou WebP"
-    ),
+    )
+    .optional(),
   category: z.string().min(1, "Categoria é obrigatória"),
-  coverImageUrl: z.string(),
 });
 
 type EditPostFormData = z.infer<typeof editPostSchema>;
@@ -78,7 +78,6 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
       excerpt: post.excerpt,
       content: post.content,
       category: post.category,
-      coverImageUrl: post.coverImage,
     },
   });
 
@@ -93,24 +92,37 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
   } = form;
 
   const handleImageChange = (file: File | null) => {
-    if (file) setValue("coverImage", file, { shouldValidate: true });
+    if (file) {
+      setValue("coverImage", file, { shouldValidate: true });
+      // Criar URL para preview
+      const url = URL.createObjectURL(file);
+      setCoverImageUrl(url);
+    } else {
+      setValue("coverImage", undefined, { shouldValidate: true });
+      setCoverImageUrl(post.coverImage);
+    }
   };
 
   const handleImageUrl = (url: string) => {
-    setValue("coverImageUrl", url, { shouldValidate: true });
+    setCoverImageUrl(url);
   };
 
   const handleImageRemove = () => {
-    setCoverImageUrl("");
+    setValue("coverImage", undefined, { shouldValidate: true });
+    setCoverImageUrl(post.coverImage);
   };
 
   const onSubmit = async (data: EditPostFormData) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("content", data.content);
-    formData.append("coverImageUrl", data.coverImageUrl);
     formData.append("excerpt", data.excerpt);
     formData.append("category", data.category);
+
+    // Só inclui a nova imagem se ela foi fornecida
+    if (data.coverImage) {
+      formData.append("coverImageUrl", data.coverImage);
+    }
 
     const result = await updatePostAction(post, formData);
 
@@ -204,7 +216,7 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
 
           <FormField
             control={form.control}
-            name="coverImageUrl"
+            name="coverImage"
             render={() => (
               <FormItem>
                 <FormLabel>Imagem de Capa</FormLabel>

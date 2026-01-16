@@ -35,6 +35,9 @@ export const ImageUpload = ({
   const [generatedUrl, setGeneratedUrl] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Inicializar com valor existente
+  const currentPreviewUrl = previewUrl || value;
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -58,12 +61,17 @@ export const ImageUpload = ({
   };
 
   const handleRemove = () => {
-    if (previewUrl) {
+    if (previewUrl && previewUrl.startsWith("blob:")) {
       URL.revokeObjectURL(previewUrl);
     }
     setPreviewUrl(null);
     setGeneratedUrl("");
-    onImageUrl?.("");
+    // Se há uma imagem original, volta para ela
+    if (value) {
+      onImageUrl?.(value);
+    } else {
+      onImageUrl?.("");
+    }
     onChange?.(null);
     onRemove?.();
     if (fileInputRef.current) {
@@ -84,14 +92,15 @@ export const ImageUpload = ({
           "border-slate-300 dark:border-slate-600",
           "hover:border-blue-400 dark:hover:border-blue-500",
           "hover:bg-slate-50 dark:hover:bg-slate-800/50",
-          previewUrl && "border-solid border-green-400 dark:border-green-500"
+          currentPreviewUrl &&
+            "border-solid border-green-400 dark:border-green-500"
         )}
       >
-        {previewUrl ? (
+        {currentPreviewUrl ? (
           <div className="space-y-4">
             <div className="relative inline-block">
               <Image
-                src={previewUrl}
+                src={currentPreviewUrl}
                 alt="Preview da imagem"
                 className="max-w-full max-h-48 rounded-lg shadow-md"
                 width={`${100}`}
