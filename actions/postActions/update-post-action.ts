@@ -14,7 +14,7 @@ const postSchema = z.object({
   title: z.string().min(1),
   excerpt: z.string().min(1).max(300),
   content: z.string().min(50),
-  coverImageUrl: z.string().min(1),
+  coverImageUrl: z.string().optional(),
   category: z.string().min(1),
 });
 
@@ -36,12 +36,6 @@ export const updatePostAction = async (post: Post, formData: FormData) => {
 
   const { title, excerpt, content, coverImageUrl, category } =
     validatedObjects.data;
-
-  if (!coverImageUrl)
-    return {
-      success: false,
-      message: "Imagem de capa não foi enviada",
-    };
 
   const authorId = await verifyLogin();
 
