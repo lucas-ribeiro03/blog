@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import {
   Dialog,
   DialogContent,
@@ -56,11 +56,16 @@ export const ConfirmationDialog = ({
             <Button
               className="bg-red-500 text-amber-50 hover:bg-red-500/70 min-w-35"
               type="submit"
+              disabled={isPending}
             >
               Apagar post
             </Button>
             <DialogClose asChild>
-              <Button variant={"secondary"} className="w-35">
+              <Button
+                variant={"secondary"}
+                className="w-35"
+                disabled={isPending}
+              >
                 Cancelar
               </Button>
             </DialogClose>

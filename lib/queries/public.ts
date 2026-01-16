@@ -4,7 +4,6 @@ import { cacheTag } from "next/cache";
 export const getPosts = async () => {
   "use cache";
   cacheTag("posts");
-  console.log("cache teste");
   const posts = await postRepository.getPosts();
   return posts;
 };

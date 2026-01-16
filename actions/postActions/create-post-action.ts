@@ -6,6 +6,7 @@ import { postRepository } from "@/repositories/post";
 import { verifyLogin } from "@/utils/manage-login";
 import { generateUniqueSlug } from "@/utils/slug-generator";
 import { eq } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { v4 as uuidv4 } from "uuid";
 import z from "zod";
 
@@ -17,7 +18,15 @@ const postSchema = z.object({
   category: z.string().min(1),
 });
 
-export default async function createPostAction(formData: FormData) {
+type CreatePostActionProps = {
+  success: boolean;
+  message: string;
+};
+
+export default async function createPostAction(
+  formData: FormData,
+  _state?: CreatePostActionProps
+) {
   const validatedObjects = postSchema.safeParse({
     title: formData.get("title")?.toString().trim(),
     excerpt: formData.get("excerpt")?.toString().trim(),
@@ -29,7 +38,7 @@ export default async function createPostAction(formData: FormData) {
   if (!validatedObjects.success) {
     return {
       success: false,
-      message: validatedObjects,
+      message: "Erro na validação do formulário",
     };
   }
 
@@ -47,12 +56,16 @@ export default async function createPostAction(formData: FormData) {
 
   if (!authorId.payload) {
     return {
-      error: "erro",
+      success: false,
+      message: "Você precisa estar logado para criar um post",
     };
   }
 
   if (!authorId.payload.sub) {
-    return "BURRO";
+    return {
+      success: false,
+      message: "Você precisa estar logado para criar um post",
+    };
   }
 
   const getCategory = await drizzleDb.query.categories.findFirst({
@@ -80,5 +93,6 @@ export default async function createPostAction(formData: FormData) {
     updatedAt: Date.now(),
   });
 
-  return "OK";
+  revalidateTag("posts", "max");
+  revalidateTag("post", "max");
 }

@@ -25,8 +25,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { categories } from "@/data/categories";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import createPostAction from "@/actions/postActions/create-post-action";
+import { useRouter } from "next/navigation";
 
 const createPostSchema = z.object({
   title: z
@@ -69,6 +70,7 @@ const categoriesWithIds = categories.map((cat) => ({
 
 export const CreatePostForm = () => {
   const [coverImageUrl, setCoverImageUrl] = useState<string>("");
+  const router = useRouter();
   const form = useForm<CreatePostFormData>({
     resolver: zodResolver(createPostSchema),
     mode: "onChange",
@@ -95,11 +97,13 @@ export const CreatePostForm = () => {
     formData.append("excerpt", data.excerpt);
     formData.append("category", data.category);
     const result = await createPostAction(formData);
-    console.log(result);
 
-    // Aqui seria onde você enviaria os dados para uma API
-    // Por enquanto, apenas um placeholder
-    alert("Post criado com sucesso! (dados apenas logados no console)");
+    if (!result?.success) {
+      toast.dismiss();
+      return toast.error(result?.message);
+    }
+
+    router.push("/");
   };
 
   const handleImageChange = (file: File | null) => {
