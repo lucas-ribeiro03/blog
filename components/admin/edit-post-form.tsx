@@ -3,7 +3,7 @@ import { Post } from "@/model/post";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/select";
 import { Pen } from "lucide-react";
 import { categories } from "@/data/categories";
+import { updatePostAction } from "@/actions/postActions/update-post-action";
+import { useRouter } from "next/navigation";
 
 const editPostSchema = z.object({
   title: z
@@ -66,6 +68,7 @@ type EditPostFormProps = {
 };
 
 export const EditPostForm = ({ post }: EditPostFormProps) => {
+  const router = useRouter();
   const [coverImageUrl, setCoverImageUrl] = useState<string>(post.coverImage);
   const form = useForm<EditPostFormData>({
     resolver: zodResolver(editPostSchema),
@@ -108,7 +111,15 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
     formData.append("coverImageUrl", data.coverImageUrl);
     formData.append("excerpt", data.excerpt);
     formData.append("category", data.category);
-    // TO DO const result = await updatePostsAction;
+
+    const result = await updatePostAction(post, formData);
+
+    if (!result?.success) {
+      toast.dismiss();
+      return toast.error(result?.message);
+    }
+
+    router.push("/admin/posts/own");
   };
 
   return (
