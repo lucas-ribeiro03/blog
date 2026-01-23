@@ -18,7 +18,14 @@ export const getPost = async (slug: string) => {
 
 export const getLikesFromUser = async(postId: string, userId: string) => {
   "use cache"
-  cacheTag('userLikes');
+  cacheTag(`user-${userId}-post-${postId}`);
   const likes = await likesRepository.getLikesFromUser(postId, userId)
+  return likes
+}
+
+export const getLikesFromPost = async(postId: string) => {
+  'use cache'
+  cacheTag(`likes-post-${postId}`)
+  const likes = await likesRepository.getLikesOnPost(postId);
   return likes
 }

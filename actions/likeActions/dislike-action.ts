@@ -21,5 +21,6 @@ export const dislikeAction = async (postId: string) => {
   }
 
   await likesRepository.unlike(userId, postId);
-  revalidateTag('userLikes', 'max')
+  revalidateTag(`user-${userId}-post-${postId}`, 'max')
+  revalidateTag(`likes-post-${postId}`, 'max')
 };
