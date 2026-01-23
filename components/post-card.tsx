@@ -1,6 +1,5 @@
 "use client";
 
-import { Heart } from "lucide-react";
 import {
   Card,
   CardDescription,
@@ -10,6 +9,7 @@ import {
 import { Post } from "@/model/post";
 import Image from "next/image";
 import Link from "next/link";
+import { Likes } from "./likes";
 
 type PostCardProps = {
   post: Post;
@@ -37,12 +37,8 @@ export const PostCard = ({ post, className, ...props }: PostCardProps) => {
             <span className="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
               {post.category}
             </span>
-            <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-              <Heart
-                className="h-4 w-4 fill-red-500 text-red-500"
-                aria-label="Ícone de curtida"
-              />
-              {/* <span className="text-sm font-medium">{post.likes}</span> */}
+            <div className="flex flex-col items-center gap-0.5">
+              <Likes post={post} />
             </div>
           </div>
           <CardTitle className="text-xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 min-h-14">
