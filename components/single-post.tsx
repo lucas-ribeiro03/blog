@@ -2,7 +2,6 @@
 
 import { Post } from "@/model/post";
 import Image from "next/image";
-import { useState } from "react";
 import { Likes } from "./likes";
 
 type SinglePostProps = {
@@ -17,7 +16,6 @@ export const SinglePost = ({
   ...props
 }: SinglePostProps) => {
   //TO DO  const [likes, setLikes] = useState(post.likes);
-  const [isLiked, setIsLiked] = useState(false);
 
   // const handleLike = () => {
   //   if (isLiked) {
