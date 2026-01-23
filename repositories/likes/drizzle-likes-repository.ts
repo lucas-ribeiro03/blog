@@ -1,8 +1,7 @@
 import { drizzleDb } from "@/db";
 import { LikesRepository } from "./likes-repository";
 import { categoriesTable, likesTable, postsTable } from "@/db/schemas";
-import { eq, sql } from "drizzle-orm";
-import { postRepository } from "../post";
+import { and, count, eq, sql } from "drizzle-orm";
 
 export class DrizzleLikesRepository implements LikesRepository {
   async like(userId: string, postId: string): Promise<void> {
@@ -17,17 +16,13 @@ export class DrizzleLikesRepository implements LikesRepository {
   async unlike(userId: string, postId: string): Promise<void> {
     await drizzleDb
       .delete(likesTable)
-      .where(eq(eq(likesTable.userId, userId), eq(likesTable.postId, postId)));
+      .where((eq(likesTable.userId, userId), eq(likesTable.postId, postId)));
   }
 
-  async getLikesOnPost(postId: string): Promise<number> {
-    const likesOnPost = await drizzleDb.query.likes.findMany({
-      where: eq(likesTable.postId, postId),
-    });
+  async getLikesOnPost(postId: string): Promise<{likesCount: number}[] | number> {
+    const getLikesCount = await drizzleDb.select({likesCount: count(likesTable.postId)}).from(likesTable).where(eq(likesTable.postId, postId))
 
-    const likesCount = likesOnPost.length;
-
-    return likesCount;
+    return getLikesCount ?? 0;
   }
 
   async getLikesByCategory(category: string): Promise<number> {
@@ -40,5 +35,14 @@ export class DrizzleLikesRepository implements LikesRepository {
       .where(eq(postsTable.categoryId, category));
 
     return getLikesFromCategory[0]?.total;
+  }
+
+  async getLikesFromUser(postId: string, userId: string): Promise<{postId: string}[]> {
+    if(!postId || !userId) throw new Error('Dados inválidos')
+    const getLikes = await drizzleDb.query.likes.findMany({
+      where: and(eq(likesTable.postId, postId), eq(likesTable.userId, userId))
+    })
+
+    return getLikes
   }
 }
