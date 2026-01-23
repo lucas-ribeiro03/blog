@@ -1,10 +1,9 @@
 "use client";
 
-import { Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Post } from "@/model/post";
 import Image from "next/image";
 import { useState } from "react";
+import { Likes } from "./likes";
 
 type SinglePostProps = {
   post: Post;
@@ -87,31 +86,9 @@ export const SinglePost = ({
 
       {/* Botão de Curtir */}
       <div className="flex items-center gap-4 pt-6 border-t border-slate-200 dark:border-slate-800">
-        <Button
-          variant="outline"
-          // onClick={handleLike}
-          className="flex items-center gap-2"
-          aria-label={isLiked ? "Descurtir post" : "Curtir post"}
-        >
-          <Heart
-            className={`h-5 w-5 transition-colors ${
-              isLiked
-                ? "fill-red-500 text-red-500"
-                : "text-slate-600 dark:text-slate-400"
-            }`}
-            aria-hidden="true"
-          />
-          <span className="font-medium">{isLiked ? "Curtido" : "Curtir"}</span>
-        </Button>
-        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <Heart
-            className="h-4 w-4 fill-red-500 text-red-500"
-            aria-label="Ícone de curtida"
-          />
-          <span className="text-sm font-medium">
-            {/* {likes} {likes === 1 ? "curtida" : "curtidas"} */}
-          </span>
-        </div>
+
+          <Likes post={post}/>
+      
       </div>
     </article>
   );
