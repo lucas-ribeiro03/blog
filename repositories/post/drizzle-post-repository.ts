@@ -65,7 +65,7 @@ export class DrizzlePostRepository implements PostRepository {
       .innerJoin(usersTable, eq(usersTable.id, postsTable.authorId))
       .innerJoin(
         categoriesTable,
-        eq(categoriesTable.id, postsTable.categoryId)
+        eq(categoriesTable.id, postsTable.categoryId),
       );
     if (!posts) return "Não há posts criados ainda";
 
@@ -174,10 +174,8 @@ export class DrizzlePostRepository implements PostRepository {
       })
       .from(postsTable)
       .innerJoin(usersTable, eq(postsTable.authorId, usersTable.id))
-      .innerJoin(
-        categoriesTable,
-        eq(categoriesTable.id, postsTable.categoryId)
-      );
+      .innerJoin(categoriesTable, eq(categoriesTable.id, postsTable.categoryId))
+      .where(eq(usersTable.id, authorId));
 
     if (!post) throw new Error("Nenhum post encontrado");
 
