@@ -6,7 +6,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Plus, FileText, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Post } from "@/model/post";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ConfirmationDialog } from "../confirmation-dialog";
 
 type OwnPostsListProps = {
@@ -111,10 +111,7 @@ export const OwnPostsList = ({
             <p className="text-slate-600 dark:text-slate-400 mb-6">
               Você ainda não publicou nenhum artigo. Que tal criar o primeiro?
             </p>
-            <Button
-              asChild
-              className="bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-            >
+            <Button className="bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
               <Link href="/admin/posts/new" className="flex items-center gap-2">
                 <Plus className="h-4 w-4" aria-hidden="true" />
                 Criar Primeiro Post
