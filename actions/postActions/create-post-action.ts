@@ -18,15 +18,7 @@ const postSchema = z.object({
   category: z.string().min(1),
 });
 
-type CreatePostActionProps = {
-  success: boolean;
-  message: string;
-};
-
-export default async function createPostAction(
-  formData: FormData,
-  _state?: CreatePostActionProps
-) {
+export default async function createPostAction(formData: FormData) {
   const validatedObjects = postSchema.safeParse({
     title: formData.get("title")?.toString().trim(),
     excerpt: formData.get("excerpt")?.toString().trim(),
