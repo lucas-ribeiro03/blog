@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProfileDropdown } from "./profile-dropdown";
 import { SettingsDropdown } from "./settings-dropdown";
+import { SearchBar } from "./search-bar";
 
 type NavbarProps = React.ComponentProps<"nav">;
 
@@ -35,20 +36,8 @@ export const Navbar = ({ className, ...props }: NavbarProps) => {
             </span>
           </div>
 
-          {/* Desktop: Search Bar */}
-          <div className="hidden md:flex flex-1 items-center justify-center px-4">
-            <div className="relative w-full max-w-md">
-              <Search
-                className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-                aria-label="Ícone de busca"
-              />
-              <Input
-                type="search"
-                placeholder="Buscar posts..."
-                className="w-full pl-10 bg-slate-50 border-slate-200 focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-slate-800"
-                aria-label="Campo de busca de posts"
-              />
-            </div>
+          <div>
+            <SearchBar />
           </div>
 
           {/* Desktop: Actions */}
