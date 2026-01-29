@@ -1,6 +1,6 @@
 import { Post } from "@/model/post";
 import { PostRepository } from "./post-repository";
-import { eq, sql } from "drizzle-orm";
+import { eq, like, sql } from "drizzle-orm";
 import { categoriesTable, postsTable, usersTable } from "@/db/schemas";
 import { drizzleDb } from "@/db";
 
@@ -232,5 +232,24 @@ export class DrizzlePostRepository implements PostRepository {
       .update(postsTable)
       .set(newPost)
       .where(eq(postsTable.id, post.id));
+  }
+
+  async getPostByTitle(title: string): Promise<Post[]> {
+    if (!title) throw new Error("Título não enviado");
+
+    const filter = title.toLowerCase();
+    const post = await drizzleDb.query.posts.findMany({
+      where: like(sql`lower(${postsTable.title})`, `%${filter}%`),
+    });
+
+    const postFixed = post.map((post) => {
+      return {
+        ...post,
+        createdAt: Number(post.createdAt),
+        updatedAt: Number(post.updatedAt),
+      };
+    });
+
+    return postFixed;
   }
 }
