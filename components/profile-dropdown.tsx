@@ -9,11 +9,15 @@ import {
 import { Button } from "./ui/button";
 import { User } from "lucide-react";
 import logoutAction from "@/actions/AuthActions/logout-action";
+import { useState } from "react";
+import { EditUserModal } from "./edit-user-modal";
 
 export const ProfileDropdown = () => {
   const handleLogout = async () => {
     await logoutAction();
   };
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <DropdownMenu>
@@ -31,11 +35,20 @@ export const ProfileDropdown = () => {
       <DropdownMenuContent className="" align="start">
         <DropdownMenuLabel className="cursor-pointer">Perfil</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">Editar</DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => setIsDialogOpen(true)}
+        >
+          Editar
+        </DropdownMenuItem>
         <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
           Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
+      <EditUserModal
+        closeDialog={() => setIsDialogOpen(false)}
+        isDialogOpen={isDialogOpen}
+      />
     </DropdownMenu>
   );
 };
