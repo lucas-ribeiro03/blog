@@ -11,7 +11,7 @@ export class DrizzleUserRepository implements UserRepository {
     name: string,
     lastName: string,
     username: string,
-    password: string
+    password: string,
   ) {
     if (!name || !lastName || !username || !password)
       return "Erro no envio do usuário";
@@ -34,19 +34,25 @@ export class DrizzleUserRepository implements UserRepository {
     return "Usuário criado";
   }
 
-  async updateUser(user: User): Promise<string> {
-    if (!user) return "Erro no envio do usuário";
+  async updateUser(id: string): Promise<string> {
+    if (!id) throw new Error("Dados inválidos");
+
+    const user = await this.getUserById(id);
+    if (!user || typeof user === "string")
+      throw new Error("Usuário não existe");
 
     const userFixed = {
       ...user,
       createdAt: new Date(user.createdAt),
-      updatedAt: new Date(user.updatedAt),
+      updatedAt: new Date(),
     };
+
+    console.log(userFixed);
 
     await drizzleDb
       .update(usersTable)
       .set(userFixed)
-      .where(eq(usersTable.id, user.id));
+      .where(eq(usersTable.id, id));
 
     return "Usuário atualizado";
   }
@@ -113,7 +119,7 @@ export class DrizzleUserRepository implements UserRepository {
 
   async getUserByNameAndLastName(
     name: string,
-    lastName: string
+    lastName: string,
   ): Promise<User[] | User | string> {
     if (!name || !lastName) throw new Error("ERRO");
 
