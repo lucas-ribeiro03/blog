@@ -6,6 +6,7 @@ export interface PostRepository {
   getPostById(id: string): Promise<Post | string>;
   getPostsByCategory(category: string): Promise<Post[] | string>;
   getPostByAuthor(author: string): Promise<Post[]>;
+  getPostByTitle(title: string): Promise<Post[]>;
   createPost(post: Post): Promise<void>;
   updatePost(post: Post): Promise<void>;
   deletePost(id: string): Promise<void>;
