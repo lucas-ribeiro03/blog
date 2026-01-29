@@ -5,9 +5,9 @@ export interface UserRepository {
     name: string,
     lastName: string,
     username: string,
-    password: string
+    password: string,
   ): Promise<string>;
-  updateUser(user: User): Promise<string>;
+  updateUser(id: string): Promise<string>;
   deleteUser(user: User): Promise<string>;
 
   getUsers(): Promise<User[] | string>;
@@ -15,6 +15,6 @@ export interface UserRepository {
   getUserByUsername(username: string): Promise<User | string>;
   getUserByNameAndLastName(
     name: string,
-    lastName: string
+    lastName: string,
   ): Promise<User[] | User | string>;
 }
