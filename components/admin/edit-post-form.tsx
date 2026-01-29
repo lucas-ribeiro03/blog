@@ -48,14 +48,14 @@ const editPostSchema = z.object({
     .instanceof(File)
     .refine(
       (file) => file.size <= 5 * 1024 * 1024,
-      "Imagem pode ter no máximo 5MB"
+      "Imagem pode ter no máximo 5MB",
     )
     .refine(
       (file) =>
         ["image/jpeg", "image/png", "image/gif", "image/webp"].includes(
-          file.type
+          file.type,
         ),
-      "Formato de imagem inválido. Use JPEG, PNG, GIF ou WebP"
+      "Formato de imagem inválido. Use JPEG, PNG, GIF ou WebP",
     )
     .optional(),
   category: z.string().min(1, "Categoria é obrigatória"),
@@ -168,7 +168,7 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
                 <FormControl>
                   <Textarea
                     placeholder="Digite um breve resumo do seu post (máx. 300 caracteres)"
-                    className="min-h-[80px] resize-none"
+                    className="min-h-20 resize-none"
                     {...field}
                     disabled={isSubmitting}
                     name="excerpt"
@@ -245,7 +245,7 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
                 <FormControl>
                   <Textarea
                     placeholder="Digite o conteúdo do seu post em Markdown..."
-                    className="min-h-[300px] resize-y font-mono text-sm"
+                    className="min-h-75 resize-y font-mono text-sm"
                     {...field}
                     disabled={isSubmitting}
                     aria-describedby="content-description"
