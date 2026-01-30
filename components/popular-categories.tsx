@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Card,
   CardContent,
@@ -8,14 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Heart, TrendingUp } from "lucide-react";
-import { categories } from "@/data/categories";
+import { getLikesByCategory } from "@/lib/queries/public";
 
 type PopularCategoriesProps = React.ComponentProps<"div">;
 
-export const PopularCategories = ({
+export const PopularCategories = async ({
   className,
   ...props
 }: PopularCategoriesProps) => {
+  const stats = await getLikesByCategory();
   return (
     <Card className={className} {...props}>
       <CardHeader>
@@ -32,9 +31,9 @@ export const PopularCategories = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {categories.map((category, index) => (
+          {stats.map((category, index) => (
             <div
-              key={category.name}
+              key={category.categoryId}
               className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors cursor-pointer group"
             >
               <div className="flex items-center gap-3">
@@ -43,7 +42,7 @@ export const PopularCategories = ({
                 </div>
                 <div>
                   <p className="font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {category.name}
+                    {category.category}
                   </p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
                     post
@@ -55,7 +54,9 @@ export const PopularCategories = ({
                   className="h-4 w-4 fill-red-500 text-red-500"
                   aria-label="Total de curtidas"
                 />
-                <span className="text-sm font-semibold">total</span>
+                <span className="text-sm font-semibold">
+                  {category.totalLikes}
+                </span>
               </div>
             </div>
           ))}
