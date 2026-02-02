@@ -9,13 +9,15 @@ import { eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { v4 as uuidv4 } from "uuid";
 import z from "zod";
+import fs from "fs";
+import path from "path";
 
 const postSchema = z.object({
   title: z.string().min(1),
   excerpt: z.string().min(1).max(300),
   content: z.string().min(50),
-  coverImageUrl: z.string().min(1),
   category: z.string().min(1),
+  coverImage: z.instanceof(File),
 });
 
 export default async function createPostAction(formData: FormData) {
@@ -23,8 +25,8 @@ export default async function createPostAction(formData: FormData) {
     title: formData.get("title")?.toString().trim(),
     excerpt: formData.get("excerpt")?.toString().trim(),
     content: formData.get("content")?.toString().trim(),
-    coverImageUrl: formData.get("coverImageUrl")?.toString().trim(),
     category: formData.get("category")?.toString().trim(),
+    coverImage: formData.get("coverImage") as File,
   });
 
   if (!validatedObjects.success) {
@@ -34,10 +36,28 @@ export default async function createPostAction(formData: FormData) {
     };
   }
 
-  const { title, excerpt, content, coverImageUrl, category } =
+  const { title, excerpt, content, coverImage, category } =
     validatedObjects.data;
 
-  if (!coverImageUrl) {
+  if (!coverImage) {
+    return;
+  }
+
+  const bytes = await coverImage.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  const uploadDir = path.join(process.cwd(), "public/uploads");
+
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+  const fileName = `${Date.now()}-${coverImage.name}`;
+  const filePath = path.join(uploadDir, fileName.toLowerCase());
+
+  fs.writeFileSync(filePath, buffer);
+
+  const imageUrl = `/uploads/${fileName}`;
+
+  if (!coverImage) {
     return {
       success: false,
       message: "Imagem de capa não enviada",
@@ -76,7 +96,7 @@ export default async function createPostAction(formData: FormData) {
     title,
     excerpt,
     content,
-    coverImage: coverImageUrl,
+    coverImage: imageUrl,
     authorId: authorId.payload.sub,
     id: uuidv4(),
     slug: generateUniqueSlug(title),
