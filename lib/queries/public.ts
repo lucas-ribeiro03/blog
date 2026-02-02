@@ -11,7 +11,7 @@ export const getPosts = async () => {
 
 export const getPost = async (slug: string) => {
   "use cache";
-  cacheTag("post");
+  cacheTag(`post-${slug}`);
   const post = await postRepository.getPostBySlug(slug);
   return post;
 };
@@ -33,7 +33,6 @@ export const getLikesFromPost = async (postId: string) => {
 export const getLikesByCategory = async () => {
   "use cache";
   cacheLife({ revalidate: 3600 });
-  console.log("buscando do banco...");
   const likes = await likesRepository.getLikesByCategory();
   return likes;
 };
