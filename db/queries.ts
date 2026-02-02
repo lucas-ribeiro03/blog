@@ -1,6 +1,6 @@
 import { drizzleDb } from ".";
 import { posts } from "../data/posts";
-import { categoriesTable, postsTable } from "./schemas";
+import { categoriesTable, likesTable, postsTable } from "./schemas";
 import { postRepository } from "@/repositories/post";
 import { userRepository } from "@/repositories/users";
 import { users } from "@/data/users";
@@ -18,710 +18,7 @@ import { v4 } from "uuid";
   //   const insertPosts = await drizzleDb.insert(postsTable).values(posts);
   //   console.log(insertPosts);
 
-  const postsToInsert = [
-    {
-      id: v4(),
-      title: "Dominando React Hooks",
-      slug: "dominando-react-hooks",
-      excerpt:
-        "Um guia completo sobre dominando react hooks para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Dominando React Hooks. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/657/800/400",
-      categoryId: "f7464aa3-55d2-44b8-bf04-ff3ade7d7d0d",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Guia de Clean Code",
-      slug: "guia-de-clean-code",
-      excerpt:
-        "Um guia completo sobre guia de clean code para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Guia de Clean Code. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/251/800/400",
-      categoryId: "2f721914-7fdf-4114-a637-abc8fbdbfcb7",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Futuro da IA em 2026",
-      slug: "futuro-da-ia-em-2026",
-      excerpt:
-        "Um guia completo sobre futuro da ia em 2026 para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Futuro da IA em 2026. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/299/800/400",
-      categoryId: "22f478ca-68cf-40e6-ae2c-caf21db2be93",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Segurança em APIs REST",
-      slug: "segurança-em-apis-rest",
-      excerpt:
-        "Um guia completo sobre segurança em apis rest para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Segurança em APIs REST. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/77/800/400",
-      categoryId: "db60a3b9-b601-4fce-a0b7-bb57d9db3e93",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Docker para Iniciantes",
-      slug: "docker-para-iniciantes",
-      excerpt:
-        "Um guia completo sobre docker para iniciantes para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Docker para Iniciantes. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/36/800/400",
-      categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Kubernetes em Produção",
-      slug: "kubernetes-em-produção",
-      excerpt:
-        "Um guia completo sobre kubernetes em produção para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Kubernetes em Produção. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/651/800/400",
-      categoryId: "062a24b7-3896-41ab-8ffb-251a710e9998",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Otimização de Performance Web",
-      slug: "otimização-de-performance-web",
-      excerpt:
-        "Um guia completo sobre otimização de performance web para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Otimização de Performance Web. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/284/800/400",
-      categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Design Systems Escaláveis",
-      slug: "design-systems-escaláveis",
-      excerpt:
-        "Um guia completo sobre design systems escaláveis para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Design Systems Escaláveis. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/756/800/400",
-      categoryId: "062a24b7-3896-41ab-8ffb-251a710e9998",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Acessibilidade na Web",
-      slug: "acessibilidade-na-web",
-      excerpt:
-        "Um guia completo sobre acessibilidade na web para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Acessibilidade na Web. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/488/800/400",
-      categoryId: "68f39e25-027f-46cb-8646-61f3e8101c28",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Node.js vs Go",
-      slug: "nodejs-vs-go",
-      excerpt:
-        "Um guia completo sobre node.js vs go para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Node.js vs Go. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/231/800/400",
-      categoryId: "839f1ccf-e7d8-467b-b6b6-b61134fd4a77",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Arquitetura de Microserviços",
-      slug: "arquitetura-de-microserviços",
-      excerpt:
-        "Um guia completo sobre arquitetura de microserviços para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Arquitetura de Microserviços. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/6/800/400",
-      categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Testes Automatizados com Jest",
-      slug: "testes-automatizados-com-jest",
-      excerpt:
-        "Um guia completo sobre testes automatizados com jest para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Testes Automatizados com Jest. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/982/800/400",
-      categoryId: "597d2c3f-505c-4850-86b0-c05bfc7c7730",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "TypeScript Avançado",
-      slug: "typescript-avançado",
-      excerpt:
-        "Um guia completo sobre typescript avançado para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema TypeScript Avançado. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/160/800/400",
-      categoryId: "68f39e25-027f-46cb-8646-61f3e8101c28",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "CSS Grid e Flexbox",
-      slug: "css-grid-e-flexbox",
-      excerpt:
-        "Um guia completo sobre css grid e flexbox para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema CSS Grid e Flexbox. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/225/800/400",
-      categoryId: "22f478ca-68cf-40e6-ae2c-caf21db2be93",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "GraphQL na Prática",
-      slug: "graphql-na-prática",
-      excerpt:
-        "Um guia completo sobre graphql na prática para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema GraphQL na Prática. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/386/800/400",
-      categoryId: "062a24b7-3896-41ab-8ffb-251a710e9998",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Serverless Computing",
-      slug: "serverless-computing",
-      excerpt:
-        "Um guia completo sobre serverless computing para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Serverless Computing. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/732/800/400",
-      categoryId: "2f721914-7fdf-4114-a637-abc8fbdbfcb7",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Monitoramento com Prometheus",
-      slug: "monitoramento-com-prometheus",
-      excerpt:
-        "Um guia completo sobre monitoramento com prometheus para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Monitoramento com Prometheus. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/866/800/400",
-      categoryId: "cde0831c-56e5-468b-8937-dc8f6d88c544",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Estratégias de SEO",
-      slug: "estratégias-de-seo",
-      excerpt:
-        "Um guia completo sobre estratégias de seo para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Estratégias de SEO. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/999/800/400",
-      categoryId: "bf6c26a4-02e5-422f-9ec3-a0b3dc184185",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "UX Writing",
-      slug: "ux-writing",
-      excerpt:
-        "Um guia completo sobre ux writing para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema UX Writing. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/888/800/400",
-      categoryId: "f7464aa3-55d2-44b8-bf04-ff3ade7d7d0d",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Metodologias Ágeis",
-      slug: "metodologias-ágeis",
-      excerpt:
-        "Um guia completo sobre metodologias ágeis para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Metodologias Ágeis. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/936/800/400",
-      categoryId: "2f721914-7fdf-4114-a637-abc8fbdbfcb7",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Carreira em Tecnologia",
-      slug: "carreira-em-tecnologia",
-      excerpt:
-        "Um guia completo sobre carreira em tecnologia para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Carreira em Tecnologia. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/390/800/400",
-      categoryId: "597d2c3f-505c-4850-86b0-c05bfc7c7730",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Soft Skills para Devs",
-      slug: "soft-skills-para-devs",
-      excerpt:
-        "Um guia completo sobre soft skills para devs para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Soft Skills para Devs. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/364/800/400",
-      categoryId: "3cd5f682-8e4c-4140-be25-e903190eeba5",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Machine Learning com Python",
-      slug: "machine-learning-com-python",
-      excerpt:
-        "Um guia completo sobre machine learning com python para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Machine Learning com Python. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/222/800/400",
-      categoryId: "db60a3b9-b601-4fce-a0b7-bb57d9db3e93",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Big Data e Analytics",
-      slug: "big-data-e-analytics",
-      excerpt:
-        "Um guia completo sobre big data e analytics para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Big Data e Analytics. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/3/800/400",
-      categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Desenvolvimento iOS com Swift",
-      slug: "desenvolvimento-ios-com-swift",
-      excerpt:
-        "Um guia completo sobre desenvolvimento ios com swift para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Desenvolvimento iOS com Swift. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/9/800/400",
-      categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Android com Kotlin",
-      slug: "android-com-kotlin",
-      excerpt:
-        "Um guia completo sobre android com kotlin para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Android com Kotlin. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/723/800/400",
-      categoryId: "597d2c3f-505c-4850-86b0-c05bfc7c7730",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Flutter vs React Native",
-      slug: "flutter-vs-react-native",
-      excerpt:
-        "Um guia completo sobre flutter vs react native para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Flutter vs React Native. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/659/800/400",
-      categoryId: "68f39e25-027f-46cb-8646-61f3e8101c28",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Web3 e Blockchain",
-      slug: "web3-e-blockchain",
-      excerpt:
-        "Um guia completo sobre web3 e blockchain para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Web3 e Blockchain. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/262/800/400",
-      categoryId: "d19f1942-3bce-47ba-9dc3-1caf206ae745",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Cibersegurança Pessoal",
-      slug: "cibersegurança-pessoal",
-      excerpt:
-        "Um guia completo sobre cibersegurança pessoal para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Cibersegurança Pessoal. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/618/800/400",
-      categoryId: "839f1ccf-e7d8-467b-b6b6-b61134fd4a77",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Gestão de Times Remotos",
-      slug: "gestão-de-times-remotos",
-      excerpt:
-        "Um guia completo sobre gestão de times remotos para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Gestão de Times Remotos. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/836/800/400",
-      categoryId: "d19f1942-3bce-47ba-9dc3-1caf206ae745",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Product Management",
-      slug: "product-management",
-      excerpt:
-        "Um guia completo sobre product management para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Product Management. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/41/800/400",
-      categoryId: "d19f1942-3bce-47ba-9dc3-1caf206ae745",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Design Thinking",
-      slug: "design-thinking",
-      excerpt:
-        "Um guia completo sobre design thinking para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Design Thinking. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/635/800/400",
-      categoryId: "f7464aa3-55d2-44b8-bf04-ff3ade7d7d0d",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Figma para Desenvolvedores",
-      slug: "figma-para-desenvolvedores",
-      excerpt:
-        "Um guia completo sobre figma para desenvolvedores para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Figma para Desenvolvedores. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/665/800/400",
-      categoryId: "424f8079-86e7-415b-9a78-c395fcb9ba90",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "PostgreSQL Performance",
-      slug: "postgresql-performance",
-      excerpt:
-        "Um guia completo sobre postgresql performance para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema PostgreSQL Performance. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/542/800/400",
-      categoryId: "bf6c26a4-02e5-422f-9ec3-a0b3dc184185",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Redis como Cache",
-      slug: "redis-como-cache",
-      excerpt:
-        "Um guia completo sobre redis como cache para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Redis como Cache. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/10/800/400",
-      categoryId: "d19f1942-3bce-47ba-9dc3-1caf206ae745",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Mensageria com RabbitMQ",
-      slug: "mensageria-com-rabbitmq",
-      excerpt:
-        "Um guia completo sobre mensageria com rabbitmq para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Mensageria com RabbitMQ. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/250/800/400",
-      categoryId: "bf6c26a4-02e5-422f-9ec3-a0b3dc184185",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Kafka para Eventos",
-      slug: "kafka-para-eventos",
-      excerpt:
-        "Um guia completo sobre kafka para eventos para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Kafka para Eventos. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/321/800/400",
-      categoryId: "22f478ca-68cf-40e6-ae2c-caf21db2be93",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Rust para Sistemas",
-      slug: "rust-para-sistemas",
-      excerpt:
-        "Um guia completo sobre rust para sistemas para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Rust para Sistemas. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/404/800/400",
-      categoryId: "839f1ccf-e7d8-467b-b6b6-b61134fd4a77",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Elixir e Phoenix",
-      slug: "elixir-e-phoenix",
-      excerpt:
-        "Um guia completo sobre elixir e phoenix para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Elixir e Phoenix. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/469/800/400",
-      categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Vue.js 3 Composition API",
-      slug: "vuejs-3-composition-api",
-      excerpt:
-        "Um guia completo sobre vue.js 3 composition api para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Vue.js 3 Composition API. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/961/800/400",
-      categoryId: "6c1783b0-7164-4c8b-94a0-692acc9d79fd",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Next.js 14 App Router",
-      slug: "nextjs-14-app-router",
-      excerpt:
-        "Um guia completo sobre next.js 14 app router para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Next.js 14 App Router. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/980/800/400",
-      categoryId: "3cd5f682-8e4c-4140-be25-e903190eeba5",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "SvelteKit Guia",
-      slug: "sveltekit-guia",
-      excerpt:
-        "Um guia completo sobre sveltekit guia para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema SvelteKit Guia. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/664/800/400",
-      categoryId: "cde0831c-56e5-468b-8937-dc8f6d88c544",
-      authorId: "2b0bb833-e3d5-4039-a166-a483c0abe565",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Tailwind CSS Dicas",
-      slug: "tailwind-css-dicas",
-      excerpt:
-        "Um guia completo sobre tailwind css dicas para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Tailwind CSS Dicas. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/27/800/400",
-      categoryId: "3cd5f682-8e4c-4140-be25-e903190eeba5",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Storybook para Componentes",
-      slug: "storybook-para-componentes",
-      excerpt:
-        "Um guia completo sobre storybook para componentes para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Storybook para Componentes. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/325/800/400",
-      categoryId: "22f478ca-68cf-40e6-ae2c-caf21db2be93",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "CI/CD com GitHub Actions",
-      slug: "ci-cd-com-github-actions",
-      excerpt:
-        "Um guia completo sobre ci/cd com github actions para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema CI/CD com GitHub Actions. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/79/800/400",
-      categoryId: "f7464aa3-55d2-44b8-bf04-ff3ade7d7d0d",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Terraform Infrastructure as Code",
-      slug: "terraform-infrastructure-as-code",
-      excerpt:
-        "Um guia completo sobre terraform infrastructure as code para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Terraform Infrastructure as Code. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/628/800/400",
-      categoryId: "f7464aa3-55d2-44b8-bf04-ff3ade7d7d0d",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Cloud Native Apps",
-      slug: "cloud-native-apps",
-      excerpt:
-        "Um guia completo sobre cloud native apps para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Cloud Native Apps. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/861/800/400",
-      categoryId: "d19f1942-3bce-47ba-9dc3-1caf206ae745",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Edge Computing",
-      slug: "edge-computing",
-      excerpt:
-        "Um guia completo sobre edge computing para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Edge Computing. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/339/800/400",
-      categoryId: "2f721914-7fdf-4114-a637-abc8fbdbfcb7",
-      authorId: "d4f0c665-6d55-4756-aca1-9165c0d0550e",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Realidade Aumentada na Web",
-      slug: "realidade-aumentada-na-web",
-      excerpt:
-        "Um guia completo sobre realidade aumentada na web para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Realidade Aumentada na Web. Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/666/800/400",
-      categoryId: "3e8ab8de-4e5b-4388-9175-ecb341409b6f",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: v4(),
-      title: "Internet das Coisas (IoT)",
-      slug: "internet-das-coisas-(iot)",
-      excerpt:
-        "Um guia completo sobre internet das coisas (iot) para elevar o nível dos seus projetos e conhecimentos técnicos.",
-      content:
-        "Neste artigo, exploramos profundamente o tema Internet das Coisas (IoT). Discutimos as melhores práticas, ferramentas essenciais e como implementar soluções eficientes no dia a dia do desenvolvimento moderno. O foco é fornecer insights práticos e teóricos para profissionais de tecnologia.",
-      coverImage: "https://picsum.photos/seed/234/800/400",
-      categoryId: "68f39e25-027f-46cb-8646-61f3e8101c28",
-      authorId: "79935040-9cf1-465e-8363-b3c4f2ce2432",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ];
-
-  await drizzleDb.insert(postsTable).values(postsToInsert);
+  // await drizzleDb.insert(postsTable).values(postsToInsert);
   // const insertCategories = await drizzleDb
   //   .insert(categoriesTable)
   //   .values(categories);
@@ -735,4 +32,148 @@ import { v4 } from "uuid";
   //     user.password,
   //   );
   // });
+
+  const users = [
+    { id: "01e12bf7-1dd1-4a54-87ff-c4d7681fb11d" },
+    { id: "1119a422-3595-4377-8cb4-2bbb385071c6" },
+    { id: "124f7b13-4985-421e-a72f-8cac24c194d1" },
+    { id: "127f7d7e-9940-4494-9dc4-0cedf7493832" },
+    { id: "1ae0b611-b124-43d9-8b9f-12d9e1103596" },
+    { id: "21319f0c-2702-4dae-a17f-3945101de3bc" },
+    { id: "2b0bb833-e3d5-4039-a166-a483c0abe565" },
+    { id: "2bb417a8-96e5-4480-8912-f5e1b0d9da4b" },
+    { id: "2c89b00f-5dc1-4725-841b-604320884320" },
+    { id: "2eaba0c9-0579-45b9-a5ba-cc5d30a4990b" },
+    { id: "34f179cd-1429-4aae-9ab3-dc148717e1e7" },
+    { id: "37dd799d-c40d-419d-a77f-2d1c535ab792" },
+    { id: "42f965cf-3d3e-45b9-8620-5566f935f6ab" },
+    { id: "44238e0b-465d-4a1c-801b-c2ff2e93eb85" },
+    { id: "4736ceec-d867-47de-96c6-29cb8f92bf7e" },
+    { id: "5455e02f-cbe7-448e-abec-341f4dc1f083" },
+    { id: "5a66f094-5783-435b-a268-7bbe9e557338" },
+    { id: "5ceeb5c5-284e-4d8c-8c61-b1b838554650" },
+    { id: "5d3ee14f-a7b3-460c-a178-612a9588e64a" },
+    { id: "607061b3-a760-4517-89d8-644c1ddcd699" },
+    { id: "673c8bd3-4041-4287-8760-203cbad3f28a" },
+    { id: "6e930965-af9f-4255-a99d-d742e98a7efb" },
+    { id: "6ef89b77-b6e1-4216-a3f7-fe70ce864978" },
+    { id: "717995c6-7951-491c-bfde-705855e59b14" },
+    { id: "73f98da1-ff35-4d17-b48b-596d2142f317" },
+    { id: "748f023d-6bd9-440b-a38b-0ff00ba1aac4" },
+    { id: "79935040-9cf1-465e-8363-b3c4f2ce2432" },
+    { id: "7b4fb775-1230-42a6-9afd-e27e63661e76" },
+    { id: "82ef6b58-8bd5-4f91-997b-86630af8069c" },
+    { id: "83ea8515-8087-4884-9051-0a3355be4471" },
+    { id: "95608ab5-22da-4563-b8d9-30382c4134ae" },
+    { id: "9c78efa9-db33-4f90-aa67-805fe6fb5902" },
+    { id: "9dc4ebe9-ac13-44f7-91d0-efbda85390a9" },
+    { id: "a42e5e57-8b96-4be6-8356-27e2547239fb" },
+    { id: "a8cb9090-143a-4c1a-b64e-c0121191c7ee" },
+    { id: "ac08bdfb-7573-42e1-b4c1-6c32bce19a43" },
+    { id: "af34ca34-c231-463e-99a9-59e9efab94d5" },
+    { id: "b1808d4d-ffd9-4660-96dc-07a2eb4265dc" },
+    { id: "b80496b4-528a-41a7-a640-dc1080785d1f" },
+    { id: "ca6caf6c-aae9-4bed-ad06-9c415a4a4bfc" },
+    { id: "cda8f4ca-0ce0-4683-8dcb-8c57b501d197" },
+    { id: "d4d67e4f-f9d0-45a6-9048-4b880d6b07b0" },
+    { id: "d4f0c665-6d55-4756-aca1-9165c0d0550e" },
+    { id: "d6ac1f2f-12b7-4ccc-9db0-637528b3487e" },
+    { id: "d9cbaea7-d730-414b-a3af-cb1457bbaa54" },
+    { id: "db488b4f-629f-4a18-b342-f2067a8ac925" },
+    { id: "dcd32e5f-3798-4c3f-a117-059c37d43c61" },
+    { id: "dd767ddf-89a6-4c98-8a46-14377c1795bb" },
+    { id: "e15a70e9-aa0a-4642-8d28-5617fd9c3feb" },
+    { id: "ec13c563-7fca-48b3-8aae-a4baf49857ae" },
+    { id: "f0f7519e-65a4-4289-b4b8-667e012feb6d" },
+    { id: "f1c26b95-6bc1-4ecb-b2d7-4dedc27ab5b1" },
+    { id: "fce13746-87d0-4563-9d28-cd81f84c042a" },
+    { id: "fd6a43c5-7fdd-4bd0-9a6d-37a03c5ab18c" },
+  ];
+
+  const posts = [
+    { id: "00a994c8-0f87-4ebf-b6c0-d6238181c011" },
+    { id: "01c9de5e-4431-41c2-91d1-b4b1d7ab13b6" },
+    { id: "04e5dbb8-229a-46e5-8828-f79902f0e9cd" },
+    { id: "06cb69c5-bd31-4d69-8e48-bcd33c2c18f5" },
+    { id: "0dcb25a2-afd5-4860-a4a8-0f5ddd637993" },
+    { id: "1" },
+    { id: "17bc0197-c66a-4df9-919e-64ad0800df26" },
+    { id: "2" },
+    { id: "21c38dd7-e99b-47fb-86a6-acb2469f7be8" },
+    { id: "229620aa-60f1-4d1a-b01a-7c406597b40a" },
+    { id: "29ec5901-8c97-4046-969f-7990bd3679fb" },
+    { id: "3" },
+    { id: "3111fd0b-041e-41fb-85fd-c4046e355b9d" },
+    { id: "390f5a02-5f2a-4d9d-a7df-1743a6f80243" },
+    { id: "3b0db776-f5c4-4e80-8d32-951f22e138d1" },
+    { id: "41073359-509b-4d40-8d06-76bfdab76223" },
+    { id: "57f4902b-0c98-4491-bbe9-168d72aa0090" },
+    { id: "5aac739e-f060-46e7-b6d2-d9769ae8bda1" },
+    { id: "61e1f63e-9d01-472b-97b3-889d7892e7b6" },
+    { id: "6af43592-36cb-4035-baad-64a5f86f9c79" },
+    { id: "70b80961-b9b7-4821-bb75-6760f681c58a" },
+    { id: "73d3a09f-4bdc-43f7-aea4-40e644c531da" },
+    { id: "74f10994-421b-44fb-aeec-1325983e4f2a" },
+    { id: "77a126cb-ec28-41b2-9f3f-6d2d2ce534ee" },
+    { id: "7c931a34-02f5-436e-a491-c416d73eb13a" },
+    { id: "882b6803-7898-4229-a354-f5226bb8d88d" },
+    { id: "8cfb10cc-733a-49eb-a571-0233dcf53327" },
+    { id: "8ff3f1cb-0c3c-434a-afdc-aab4bee23135" },
+    { id: "90303ac7-6fc8-48e0-8356-413aea608b45" },
+    { id: "90e1aa49-b78b-45ba-9ec5-8600290e8cc5" },
+    { id: "91831bc5-9b6e-46f3-a007-222adfa6536f" },
+    { id: "9451583e-e779-4fce-84dd-f66d56dce900" },
+    { id: "9a2cce4d-3900-4270-bfe0-87925d92e1b3" },
+    { id: "9a37bda0-79fe-4c93-86fb-9b7f7732a975" },
+    { id: "a2eb6185-82b6-45cb-8dd7-64dec2c7cfb6" },
+    { id: "a57b36df-2fe1-468b-9238-36bc496d2897" },
+    { id: "a64aaf48-0fde-4d95-8d97-8f7daac8a86f" },
+    { id: "a8ee38bd-8187-4072-9469-16108f772d5b" },
+    { id: "aaed8d2c-fe07-4eb1-b345-8ff7eb1d9865" },
+    { id: "b3b45ed6-0291-4034-a33b-1e3123ae4032" },
+    { id: "b9c18a63-8265-4bab-876a-cf537b9fbd70" },
+    { id: "bb2be33c-a6f2-490e-bddb-7c7056b4a6dd" },
+    { id: "bf205d87-d171-4183-949b-c726ee209910" },
+    { id: "c076ac24-7e01-4b76-aa37-4bbc03a7ef88" },
+    { id: "c820c73d-0f8e-436c-94eb-583b5526101a" },
+    { id: "cb93d6cc-d961-41e7-b1a0-2501e8948c43" },
+    { id: "d8bebcc9-82c2-4923-b502-19c2d7483ea7" },
+    { id: "e1ac6dcc-04e6-4510-9108-9e7f064cf08a" },
+    { id: "e27890d0-c889-47dd-861e-328d37dc8261" },
+    { id: "e32a4e83-2b01-4cb4-8464-1a0d0113fe71" },
+    { id: "e8471ab9-930c-40a1-bd72-21cea128b638" },
+    { id: "f4c4cf8a-03d7-4e97-afaa-9630b3bf29d1" },
+    { id: "f4ff4e72-3427-4163-983b-5614fe696d00" },
+    { id: "ff9f34a9-b4e5-49c9-a068-49d82e9f77d8" },
+  ];
+
+  // const shuffle = <T>(array: T[]): T[] => {
+  //   return [...array].sort(() => Math.random() - 0.5);
+  // };
+
+  const seedLikes = async () => {
+    const createdAt = new Date();
+    // for (const postId of posts) {
+    //   const likesAmount = Math.floor(Math.random() * 35);
+    //   const selectedUsers = shuffle([...users]).slice(0, likesAmount);
+
+    //   for (const userId of selectedUsers) {
+    //     try {
+    //       // console.log("entrei no try");
+    //       const q = await drizzleDb.insert(likesTable).values({
+    //         postId: postId.id,
+    //         userId: userId.id,
+    //         createdAt: new Date(),
+    //       });
+
+    //       console.log("query completa");
+    //       console.log(q);
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   }
+    // }
+  };
+
+  seedLikes();
 })();
