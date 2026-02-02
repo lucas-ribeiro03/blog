@@ -16,7 +16,7 @@ export class DrizzleLikesRepository implements LikesRepository {
   async unlike(userId: string, postId: string): Promise<void> {
     await drizzleDb
       .delete(likesTable)
-      .where((eq(likesTable.userId, userId), eq(likesTable.postId, postId)));
+      .where(and(eq(likesTable.userId, userId), eq(likesTable.postId, postId)));
   }
 
   async getLikesOnPost(

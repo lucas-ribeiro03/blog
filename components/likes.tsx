@@ -12,13 +12,12 @@ type LikesProps = {
 
 export const Likes = ({ post }: LikesProps) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [likesCount, setLikesCount] = useState<number>(0)
+  const [likesCount, setLikesCount] = useState<number>(0);
   useEffect(() => {
     const getLikesFromUser = async () => {
       const result = await getLikesAction(post.id);
-      const postsLiked = result.find(result => result.postId === post.id)
-      if(postsLiked?.postId === post.id) return setIsLiked(true)
-
+      const postsLiked = result.find((result) => result.postId === post.id);
+      if (postsLiked?.postId === post.id) return setIsLiked(true);
     };
 
     getLikesFromUser();
@@ -27,12 +26,12 @@ export const Likes = ({ post }: LikesProps) => {
   useEffect(() => {
     const getLikes = async () => {
       const result = await getLikesFromPostAction(post.id);
-      if(typeof result !== 'number') {
-        const likeCount = result[0]
-        if(likeCount) setLikesCount(Number(likeCount.likesCount))
-       
+      console.log(result);
+      if (typeof result !== "number") {
+        const likeCount = result[0];
+        console.log(likeCount);
+        if (likeCount) setLikesCount(Number(likeCount.likesCount));
       }
-      
     };
     getLikes();
   }, [post]);
@@ -41,10 +40,10 @@ export const Likes = ({ post }: LikesProps) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
+    setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
     if (!isLiked) {
       startTransition(async () => {
-        const result = await likeAction(post.id);
-        console.log(result)
+        await likeAction(post.id);
       });
     } else {
       startTransition(async () => {
@@ -52,7 +51,6 @@ export const Likes = ({ post }: LikesProps) => {
       });
     }
     setIsLiked((prev) => !prev);
-    console.log(isLiked)
   };
 
   return (
