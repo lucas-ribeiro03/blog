@@ -3,6 +3,7 @@
 import { Post } from "@/model/post";
 import Image from "next/image";
 import { Likes } from "./likes";
+import { MarkdownRenderer } from "./markdown-renderer";
 
 type SinglePostProps = {
   post: Post;
@@ -62,9 +63,7 @@ export const SinglePost = ({
       </div>
 
       <div className="prose prose-slate dark:prose-invert max-w-none">
-        <div className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
-          {post.content}
-        </div>
+        <MarkdownRenderer content={post.content} />
       </div>
 
       <div className="flex items-center gap-4 pt-6 border-t border-slate-200 dark:border-slate-800">
