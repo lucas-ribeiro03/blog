@@ -94,6 +94,5 @@ export const updatePostAction = async (post: Post, formData: FormData) => {
     createdAt: post.createdAt,
   });
 
-  revalidateTag("posts", "max");
-  revalidateTag("post", "max");
+  revalidateTag(`post-${post.slug}`, "max");
 };

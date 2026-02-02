@@ -106,5 +106,4 @@ export default async function createPostAction(formData: FormData) {
   });
 
   revalidateTag("posts", "max");
-  revalidateTag("post", "max");
 }
