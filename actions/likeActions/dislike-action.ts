@@ -2,7 +2,6 @@
 
 import { likesRepository } from "@/repositories/likes";
 import { verifyLogin } from "@/utils/manage-login";
-import { revalidateTag } from "next/cache";
 
 export const dislikeAction = async (postId: string) => {
   const user = await verifyLogin();
@@ -21,6 +20,4 @@ export const dislikeAction = async (postId: string) => {
   }
 
   await likesRepository.unlike(userId, postId);
-  revalidateTag(`user-${userId}-post-${postId}`, 'max')
-  revalidateTag(`likes-post-${postId}`, 'max')
 };

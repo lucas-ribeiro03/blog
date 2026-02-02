@@ -22,8 +22,6 @@ export const likeAction = async (postId: string) => {
 
   try {
     await likesRepository.like(userId, postId);
-    revalidateTag(`user-${userId}-post-${postId}`, 'max')
-    revalidateTag(`likes-post-${postId}`, 'max')
   } catch (e) {
     console.log(e);
     return {

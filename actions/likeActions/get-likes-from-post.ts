@@ -1,9 +1,9 @@
 "use server";
 
-import { getLikesFromPost } from "@/lib/queries/public";
+import { likesRepository } from "@/repositories/likes";
 
 export const getLikesFromPostAction = async (postId: string) => {
-  const likes = await getLikesFromPost(postId)
+  const likes = await likesRepository.getLikesOnPost(postId);
 
   return likes;
 };
