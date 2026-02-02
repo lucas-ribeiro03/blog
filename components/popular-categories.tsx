@@ -44,9 +44,6 @@ export const PopularCategories = async ({
                   <p className="font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {category.category}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    post
-                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400">

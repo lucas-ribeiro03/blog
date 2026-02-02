@@ -58,7 +58,6 @@ const createPostSchema = z.object({
       "Formato de imagem inválido. Use JPEG, PNG, GIF ou WebP",
     ),
   category: z.string().min(1, "Categoria é obrigatória"),
-  coverImageUrl: z.string(),
 });
 
 type CreatePostFormData = z.infer<typeof createPostSchema>;
@@ -69,7 +68,6 @@ const categoriesWithIds = categories.map((cat) => ({
 }));
 
 export const CreatePostForm = () => {
-  const [coverImageUrl, setCoverImageUrl] = useState<string>("");
   const router = useRouter();
   const form = useForm<CreatePostFormData>({
     resolver: zodResolver(createPostSchema),
@@ -79,7 +77,6 @@ export const CreatePostForm = () => {
       excerpt: "",
       content: "",
       category: "",
-      coverImageUrl: "",
     },
   });
 
@@ -93,9 +90,9 @@ export const CreatePostForm = () => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("content", data.content);
-    formData.append("coverImageUrl", data.coverImageUrl);
     formData.append("excerpt", data.excerpt);
     formData.append("category", data.category);
+    formData.append("coverImage", data.coverImage);
     const result = await createPostAction(formData);
 
     if (result?.success === false) {
@@ -108,14 +105,6 @@ export const CreatePostForm = () => {
 
   const handleImageChange = (file: File | null) => {
     setValue("coverImage", file as File, { shouldValidate: true });
-  };
-
-  const handleImageUrl = (url: string) => {
-    setValue("coverImageUrl", url, { shouldValidate: true });
-  };
-
-  const handleImageRemove = () => {
-    setCoverImageUrl("");
   };
 
   return (
@@ -196,16 +185,13 @@ export const CreatePostForm = () => {
 
           <FormField
             control={form.control}
-            name="coverImageUrl"
+            name="coverImage"
             render={() => (
               <FormItem>
                 <FormLabel>Imagem de Capa</FormLabel>
                 <FormControl>
                   <ImageUpload
-                    value={coverImageUrl}
                     onChange={handleImageChange}
-                    onRemove={handleImageRemove}
-                    onImageUrl={handleImageUrl}
                     maxSize={5}
                     accept="image/*"
                     aria-describedby="cover-image-description"

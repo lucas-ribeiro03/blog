@@ -16,6 +16,7 @@ type PostCardProps = {
 } & React.ComponentProps<"div">;
 
 export const PostCard = ({ post, className, ...props }: PostCardProps) => {
+  console.log(post.coverImage);
   return (
     <Link href={`/post/${post.slug}`} className="block">
       <Card
@@ -26,10 +27,11 @@ export const PostCard = ({ post, className, ...props }: PostCardProps) => {
       >
         <div className="relative h-48 w-full overflow-hidden">
           <Image
-            src={post.coverImage}
+            src={`${post.coverImage}`}
             alt={post.title}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
+            unoptimized
           />
         </div>
         <CardHeader>

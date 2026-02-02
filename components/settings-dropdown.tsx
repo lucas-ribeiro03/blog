@@ -64,9 +64,6 @@ export const SettingsDropdown = () => {
           >
             Tema escuro
           </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem className="cursor-pointer">
-            Notificações
-          </DropdownMenuCheckboxItem>
           <DropdownMenuItem
             className="ml-6 cursor-pointer"
             onSelect={() => setShowLanguageDialog(true)}

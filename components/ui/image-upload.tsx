@@ -3,39 +3,31 @@
 import { useState, useRef } from "react";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { toast } from "react-toastify";
 import Image from "next/image";
 
 type ImageUploadProps = {
   onChange?: (file: File | null) => void;
-  onRemove?: () => void;
-  onImageUrl: (url: string) => void;
   maxSize?: number; // em MB
   accept?: string;
   placeholder?: string;
   className?: string;
-  value: string;
+  value?: string;
 };
 
 export const ImageUpload = ({
   onChange,
-  onRemove,
   maxSize = 5,
   accept = "image/*",
   placeholder = "Clique para selecionar uma imagem",
   className,
-  onImageUrl,
   value,
   ...props
 }: ImageUploadProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [generatedUrl, setGeneratedUrl] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Inicializar com valor existente
   const currentPreviewUrl = previewUrl || value;
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,17 +39,14 @@ export const ImageUpload = ({
       return;
     }
 
-    // Criar preview
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
 
-    // Gerar URL futura (baseada no nome do arquivo)
-    const fileName = `${Date.now()}-${file.name}`;
-    const futureUrl = `/uploads/${fileName}`;
-    setGeneratedUrl(futureUrl);
-
     onChange?.(file);
-    onImageUrl?.(futureUrl);
   };
 
   const handleRemove = () => {
@@ -65,15 +54,8 @@ export const ImageUpload = ({
       URL.revokeObjectURL(previewUrl);
     }
     setPreviewUrl(null);
-    setGeneratedUrl("");
-    // Se há uma imagem original, volta para ela
-    if (value) {
-      onImageUrl?.(value);
-    } else {
-      onImageUrl?.("");
-    }
+
     onChange?.(null);
-    onRemove?.();
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -93,7 +75,7 @@ export const ImageUpload = ({
           "hover:border-blue-400 dark:hover:border-blue-500",
           "hover:bg-slate-50 dark:hover:bg-slate-800/50",
           currentPreviewUrl &&
-            "border-solid border-green-400 dark:border-green-500"
+            "border-solid border-green-400 dark:border-green-500",
         )}
       >
         {currentPreviewUrl ? (
@@ -157,50 +139,6 @@ export const ImageUpload = ({
         className="hidden"
         aria-label="Selecionar arquivo de imagem"
       />
-
-      {/* Campo URL readonly */}
-      {generatedUrl && (
-        <div className="space-y-2">
-          <Label htmlFor="generated-url" className="text-sm font-medium">
-            URL da Imagem
-          </Label>
-          <div className="flex gap-2">
-            <Input
-              id="generated-url"
-              value={generatedUrl}
-              readOnly
-              className="bg-slate-50 dark:bg-slate-900 cursor-not-allowed"
-              aria-label="URL gerada para a imagem"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => navigator.clipboard.writeText(generatedUrl)}
-              title="Copiar URL"
-              aria-label="Copiar URL da imagem"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                />
-              </svg>
-            </Button>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Esta URL será usada para acessar a imagem após o upload
-          </p>
-        </div>
-      )}
     </div>
   );
 };

@@ -56,8 +56,7 @@ const editPostSchema = z.object({
           file.type,
         ),
       "Formato de imagem inválido. Use JPEG, PNG, GIF ou WebP",
-    )
-    .optional(),
+    ),
   category: z.string().min(1, "Categoria é obrigatória"),
 });
 
@@ -94,22 +93,14 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
   const handleImageChange = (file: File | null) => {
     if (file) {
       setValue("coverImage", file, { shouldValidate: true });
-      // Criar URL para preview
-      const url = URL.createObjectURL(file);
-      setCoverImageUrl(url);
-    } else {
-      setValue("coverImage", undefined, { shouldValidate: true });
-      setCoverImageUrl(post.coverImage);
+      setCoverImageUrl((prev) => {
+        if (prev.startsWith("blob:")) {
+          URL.revokeObjectURL(prev);
+        }
+
+        return URL.createObjectURL(file);
+      });
     }
-  };
-
-  const handleImageUrl = (url: string) => {
-    setCoverImageUrl(url);
-  };
-
-  const handleImageRemove = () => {
-    setValue("coverImage", undefined, { shouldValidate: true });
-    setCoverImageUrl(post.coverImage);
   };
 
   const onSubmit = async (data: EditPostFormData) => {
@@ -118,15 +109,12 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
     formData.append("content", data.content);
     formData.append("excerpt", data.excerpt);
     formData.append("category", data.category);
+    console.log(data.coverImage);
 
-    // Só inclui a nova imagem se ela foi fornecida
-    if (data.coverImage) {
-      formData.append("coverImageUrl", data.coverImage);
-    }
-
+    formData.append("coverImage", data.coverImage);
     const result = await updatePostAction(post, formData);
 
-    if (!result?.success) {
+    if (result?.success === false) {
       toast.dismiss();
       return toast.error(result?.message);
     }
@@ -224,8 +212,6 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
                   <ImageUpload
                     value={coverImageUrl}
                     onChange={handleImageChange}
-                    onRemove={handleImageRemove}
-                    onImageUrl={handleImageUrl}
                     maxSize={5}
                     accept="image/*"
                     aria-describedby="cover-image-description"
