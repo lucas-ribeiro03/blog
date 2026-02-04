@@ -1,7 +1,7 @@
 import { drizzleDb } from "@/db";
 import { LikesRepository } from "./likes-repository";
 import { categoriesTable, likesTable, postsTable } from "@/db/schemas";
-import { and, count, desc, eq, sql } from "drizzle-orm";
+import { and, count, desc, eq, inArray, sql } from "drizzle-orm";
 
 export class DrizzleLikesRepository implements LikesRepository {
   async like(userId: string, postId: string): Promise<void> {
@@ -20,14 +20,34 @@ export class DrizzleLikesRepository implements LikesRepository {
   }
 
   async getLikesOnPost(
-    postId: string,
-  ): Promise<{ likesCount: number }[] | number> {
-    const getLikesCount = await drizzleDb
-      .select({ likesCount: count(likesTable.postId) })
-      .from(likesTable)
-      .where(eq(likesTable.postId, postId));
+    postIds: string[],
+    userId: string,
+  ): Promise<Record<string, { likesCount: number; isLikedByMe: boolean }>> {
+    // const getLikesCount = await drizzleDb
+    //   .select({ likesCount: count(likesTable.postId) })
+    //   .from(likesTable)
+    //   .where(eq(likesTable.postId, postId));
 
-    return getLikesCount ?? 0;
+    const rows = await drizzleDb
+      .select({
+        postId: likesTable.postId,
+        likesCount: count(likesTable.postId),
+        isLikedByMe: sql<boolean>`sum (case when ${likesTable.userId} = ${userId} then 1 else 0 end)`,
+      })
+      .from(likesTable)
+      .where(inArray(likesTable.postId, postIds))
+      .groupBy(likesTable.postId);
+
+    return rows.reduce(
+      (acc, row) => {
+        acc[row.postId] = {
+          likesCount: Number(row.likesCount) ?? 0,
+          isLikedByMe: row.isLikedByMe ?? false,
+        };
+        return acc;
+      },
+      {} as Record<string, { likesCount: number; isLikedByMe: boolean }>,
+    );
   }
 
   async getLikesByCategory(): Promise<
@@ -48,17 +68,5 @@ export class DrizzleLikesRepository implements LikesRepository {
       .limit(5);
 
     return getLikesFromCategory;
-  }
-
-  async getLikesFromUser(
-    postId: string,
-    userId: string,
-  ): Promise<{ postId: string }[]> {
-    if (!postId || !userId) throw new Error("Dados inválidos");
-    const getLikes = await drizzleDb.query.likes.findMany({
-      where: and(eq(likesTable.postId, postId), eq(likesTable.userId, userId)),
-    });
-
-    return getLikes;
   }
 }
