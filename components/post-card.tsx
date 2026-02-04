@@ -13,10 +13,23 @@ import { Likes } from "./likes";
 
 type PostCardProps = {
   post: Post;
+  likes: {
+    isLikedByMe: boolean;
+    likesCount: number;
+  };
 } & React.ComponentProps<"div">;
 
-export const PostCard = ({ post, className, ...props }: PostCardProps) => {
-  console.log(post.coverImage);
+export const PostCard = ({
+  post,
+  className,
+  likes,
+  ...props
+}: PostCardProps) => {
+  if (typeof likes === "undefined")
+    likes = {
+      isLikedByMe: false,
+      likesCount: 0,
+    };
   return (
     <Link href={`/post/${post.slug}`} className="block">
       <Card
@@ -40,7 +53,11 @@ export const PostCard = ({ post, className, ...props }: PostCardProps) => {
               {post.category}
             </span>
             <div className="flex flex-col items-center gap-0.5">
-              <Likes post={post} />
+              <Likes
+                post={post}
+                isLikedByMe={likes.isLikedByMe}
+                likesCount={likes.likesCount}
+              />
             </div>
           </div>
           <CardTitle className="text-xl group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 min-h-14">

@@ -1,6 +1,5 @@
 import { dislikeAction } from "@/actions/likeActions/dislike-action";
 import { getLikesAction } from "@/actions/likeActions/get-likes-action";
-import { getLikesFromPostAction } from "@/actions/likeActions/get-likes-from-post";
 import { likeAction } from "@/actions/likeActions/like-action";
 import { Post } from "@/model/post";
 import { Heart } from "lucide-react";
@@ -8,48 +7,24 @@ import { useEffect, useState, useTransition } from "react";
 
 type LikesProps = {
   post: Post;
+  likesCount: number;
+  isLikedByMe: boolean | false;
 } & React.ComponentProps<"button">;
 
-export const Likes = ({ post }: LikesProps) => {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [likesCount, setLikesCount] = useState<number>(0);
-  useEffect(() => {
-    const getLikesFromUser = async () => {
-      const result = await getLikesAction(post.id);
-      const postsLiked = result.find((result) => result.postId === post.id);
-      if (postsLiked?.postId === post.id) return setIsLiked(true);
-    };
+export const Likes = ({ post, likesCount, isLikedByMe }: LikesProps) => {
+  const [isLiked, setIsLiked] = useState<boolean>(isLikedByMe);
+  const [count, setCount] = useState<number>(likesCount);
 
-    getLikesFromUser();
-  }, [post.id]);
-
-  useEffect(() => {
-    const getLikes = async () => {
-      const result = await getLikesFromPostAction(post.id);
-      console.log(result);
-      if (typeof result !== "number") {
-        const likeCount = result[0];
-        console.log(likeCount);
-        if (likeCount) setLikesCount(Number(likeCount.likesCount));
-      }
-    };
-    getLikes();
-  }, [post]);
-
-  const [, startTransition] = useTransition();
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
+
     if (!isLiked) {
-      startTransition(async () => {
-        await likeAction(post.id);
-      });
+      await likeAction(post.id);
     } else {
-      startTransition(async () => {
-        await dislikeAction(post.id);
-      });
+      await dislikeAction(post.id);
     }
+    setCount(isLiked ? count - 1 : count + 1);
     setIsLiked((prev) => !prev);
   };
 
@@ -67,7 +42,7 @@ export const Likes = ({ post }: LikesProps) => {
         />
       </button>
       <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-        {likesCount}
+        {count}
       </span>
     </div>
   );
