@@ -25,7 +25,7 @@ export const PostCard = ({
   likes,
   ...props
 }: PostCardProps) => {
-  if (typeof likes === "undefined")
+  if (!likes)
     likes = {
       isLikedByMe: false,
       likesCount: 0,

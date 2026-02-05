@@ -11,11 +11,13 @@ import { ConfirmationDialog } from "../confirmation-dialog";
 
 type OwnPostsListProps = {
   posts: Post[];
+  likes: Record<string, { likesCount: number; isLikedByMe: boolean }>;
 } & React.ComponentProps<"div">;
 
 export const OwnPostsList = ({
   posts,
   className,
+  likes,
   ...props
 }: OwnPostsListProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -63,7 +65,7 @@ export const OwnPostsList = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <div key={post.id} className="relative group">
-              <PostCard post={post} className="h-full" />
+              <PostCard post={post} likes={likes[post.id]} className="h-full" />
 
               {/* Admin Actions - Only visible on hover */}
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-1 z-10">
