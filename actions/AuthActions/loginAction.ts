@@ -16,7 +16,7 @@ type ActionStateProps = {
 
 export async function loginUserAction(
   prevState: ActionStateProps,
-  formData: FormData
+  formData: FormData,
 ) {
   try {
     const validatedFields = loginSchema.safeParse({
@@ -55,7 +55,7 @@ export async function loginUserAction(
       message: "Login realizado",
     };
   } catch (e) {
-    console.log("Erro em loginAction", e);
+    console.log("Erro ao criar sessão", e);
     return {
       success: false,
       message: "Erro inesperado. Tente novamente mais tarde",

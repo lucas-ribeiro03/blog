@@ -21,7 +21,6 @@ const postSchema = z.object({
 });
 
 export const updatePostAction = async (post: Post, formData: FormData) => {
-  console.log(formData.get("coverImage") as File);
   const validatedObjects = postSchema.safeParse({
     title: formData.get("title")?.toString().trim(),
     excerpt: formData.get("excerpt")?.toString().trim(),
@@ -31,7 +30,6 @@ export const updatePostAction = async (post: Post, formData: FormData) => {
   });
 
   if (!validatedObjects.success) {
-    console.log("ERRO", validatedObjects.error);
     return {
       success: false,
       message: "Erro na validação do formulário",

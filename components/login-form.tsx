@@ -61,13 +61,12 @@ export const LoginForm = () => {
 
       const result = await loginUserAction(
         { message: "", success: false },
-        formData
+        formData,
       );
       if (!result) throw new Error("Erro ao criar sessão");
 
       toast.dismiss();
       if (!result.success) {
-        console.log(result);
         toast.error(result?.message);
         return;
       }

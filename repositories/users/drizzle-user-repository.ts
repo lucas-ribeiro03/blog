@@ -47,8 +47,6 @@ export class DrizzleUserRepository implements UserRepository {
       updatedAt: new Date(),
     };
 
-    console.log(userFixed);
-
     await drizzleDb
       .update(usersTable)
       .set(userFixed)

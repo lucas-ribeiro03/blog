@@ -13,7 +13,6 @@ export const getLikesFromPostAction = async () => {
   const { sub } = user.payload;
   if (!sub) return;
   const likes = await likesRepository.getLikesOnPost(postIds, sub);
-  console.log(likes);
 
   return likes;
 };

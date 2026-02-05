@@ -22,12 +22,10 @@ export const ConfirmationDialog = ({
   id,
 }: ConfirmationDialogProps) => {
   const [isPending, startTransition] = useTransition();
-  console.log(id);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
       try {
-        console.log("oii");
         await deletePostAction(id);
         closeDialog();
       } catch (e) {

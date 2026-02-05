@@ -1,9 +1,8 @@
 import { dislikeAction } from "@/actions/likeActions/dislike-action";
-import { getLikesAction } from "@/actions/likeActions/get-likes-action";
 import { likeAction } from "@/actions/likeActions/like-action";
 import { Post } from "@/model/post";
 import { Heart } from "lucide-react";
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 
 type LikesProps = {
   post: Post;

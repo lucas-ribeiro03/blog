@@ -109,8 +109,6 @@ export const EditPostForm = ({ post }: EditPostFormProps) => {
     formData.append("content", data.content);
     formData.append("excerpt", data.excerpt);
     formData.append("category", data.category);
-    console.log(data.coverImage);
-
     formData.append("coverImage", data.coverImage);
     const result = await updatePostAction(post, formData);
 

@@ -35,14 +35,14 @@ const registerSchema = z
       .max(50, "O nome de usuário deve ter no máximo 50 caracteres")
       .regex(
         /^[a-zA-Z0-9_]+$/,
-        "O nome de usuário deve conter apenas letras, números e underscore"
+        "O nome de usuário deve conter apenas letras, números e underscore",
       ),
     password: z
       .string()
       .min(6, "A senha deve ter pelo menos 6 caracteres")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "A senha deve conter pelo menos uma letra minúscula, uma maiúscula e um número"
+        "A senha deve conter pelo menos uma letra minúscula, uma maiúscula e um número",
       ),
     confirmPassword: z.string(),
   })
@@ -84,10 +84,9 @@ export const RegisterForm = () => {
         formData.append("password", data.password);
         const result = await createUserAction(
           { message: "", success: false },
-          formData
+          formData,
         );
 
-        console.log(result);
         if (!result.success) {
           toast.error(result.message);
           return;

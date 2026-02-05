@@ -44,3 +44,4 @@ db/migrations
 db.sqlite
 
 TODOS.txt
+public/uploads

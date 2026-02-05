@@ -18,7 +18,7 @@ const registerSchema = z.object({
 
 export default async function createUserAction(
   prevState: ActionStateProps,
-  formData: FormData
+  formData: FormData,
 ) {
   try {
     const validatedFields = registerSchema.safeParse({
@@ -50,7 +50,7 @@ export default async function createUserAction(
       message: "Login realizado",
     };
   } catch (e) {
-    console.log(e);
+    console.log("Erro ao criar usuário", e);
     return {
       success: false,
       message: "Erro: " + e,

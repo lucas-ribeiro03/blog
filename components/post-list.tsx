@@ -1,6 +1,5 @@
-import { getLikesAction } from "@/actions/likeActions/get-likes-action";
 import { PostCard } from "./post-card";
-import { getLikesFromPost, getPosts } from "@/lib/queries/public";
+import { getPosts } from "@/lib/queries/public";
 import { getLikesFromPostAction } from "@/actions/likeActions/get-likes-from-post";
 
 export const PostList = async () => {

@@ -1,7 +1,6 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -10,16 +9,6 @@ import {
 import { Button } from "./ui/button";
 import { Settings } from "lucide-react";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
-import { BR, US } from "country-flag-icons/react/1x1";
 
 function getInitialTheme() {
   if (typeof window === "undefined") return false;
@@ -27,10 +16,6 @@ function getInitialTheme() {
 }
 
 export const SettingsDropdown = () => {
-  const [showLanguageDialog, setShowLanguageDialog] = useState(false);
-  // TODO   const [languageSelected, setLanguageSelected] = useState<"BR" | "US">("BR");
-  //TODO NOTIFICAÇÕES
-
   const [isDark, setIsDark] = useState(getInitialTheme);
 
   const toggleDarkTheme = () => {
@@ -64,40 +49,8 @@ export const SettingsDropdown = () => {
           >
             Tema escuro
           </DropdownMenuCheckboxItem>
-          <DropdownMenuItem
-            className="ml-6 cursor-pointer"
-            onSelect={() => setShowLanguageDialog(true)}
-          >
-            Linguagem
-          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Dialog open={showLanguageDialog} onOpenChange={setShowLanguageDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Selecionar linguagem</DialogTitle>
-            <DialogDescription>
-              Altere para a linguagem de sua preferência
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-around">
-            <div className="bg-slate-700 rounded-md hover:bg-slate-800 transition duration-200 cursor-pointer group">
-              <US className="w-20 h-20 rounded-full cursor-pointer p-1 group-hover:brightness-50 transition" />
-            </div>
-            <div className="bg-slate-700 rounded-md hover:bg-slate-800 transition duration-200 group cursor-pointer">
-              <BR className="w-20 h-20 rounded-full  p-1 group-hover:brightness-50 transition" />
-            </div>
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button className="hover:text-red-500" variant={"outline"}>
-                Cancelar
-              </Button>
-            </DialogClose>
-            <Button>Confirmar</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 };
