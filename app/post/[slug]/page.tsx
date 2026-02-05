@@ -3,6 +3,7 @@ import { SinglePost } from "@/components/single-post";
 import { Navbar } from "@/components/navbar";
 import { getPost } from "@/lib/queries/public";
 import { Suspense } from "react";
+import { getLikesFromPostAction } from "@/actions/likeActions/get-likes-from-post";
 
 type PostPageProps = {
   params: Promise<{ slug: string }>;
@@ -29,12 +30,19 @@ export async function generateMetadata({
 export const PostPageInner = async ({ params }: PostPageProps) => {
   const { slug } = await params;
   const post = await getPost(slug);
+  const likeSummary = await getLikesFromPostAction();
+  if (!likeSummary) return;
+
   if (typeof post !== "string")
     return (
       <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
         <Navbar />
         <main className="container mx-auto px-4 py-12">
-          <SinglePost post={post} category={post.category || ""} />
+          <SinglePost
+            post={post}
+            category={post.category || ""}
+            likes={likeSummary[post.id]}
+          />
         </main>
       </div>
     );

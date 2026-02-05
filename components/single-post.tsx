@@ -8,12 +8,14 @@ import { MarkdownRenderer } from "./markdown-renderer";
 type SinglePostProps = {
   post: Post;
   category: string;
+  likes: { likesCount: number; isLikedByMe: boolean };
 } & React.ComponentProps<"article">;
 
 export const SinglePost = ({
   post,
   className,
   category,
+  likes,
   ...props
 }: SinglePostProps) => {
   const formatDate = (rawDate: number) => {
@@ -24,6 +26,13 @@ export const SinglePost = ({
       year: "numeric",
     }).format(date);
   };
+
+  if (!likes) {
+    likes = {
+      likesCount: 0,
+      isLikedByMe: false,
+    };
+  }
 
   return (
     <article
@@ -67,7 +76,11 @@ export const SinglePost = ({
       </div>
 
       <div className="flex items-center gap-4 pt-6 border-t border-slate-200 dark:border-slate-800">
-        <Likes post={post} />
+        <Likes
+          post={post}
+          likesCount={likes.likesCount}
+          isLikedByMe={likes.isLikedByMe}
+        />
       </div>
     </article>
   );
