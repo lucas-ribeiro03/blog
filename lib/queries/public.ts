@@ -16,20 +16,6 @@ export const getPost = async (slug: string) => {
   return post;
 };
 
-export const getLikesFromUser = async (postId: string, userId: string) => {
-  "use cache";
-  cacheTag(`user-${userId}-post-${postId}`);
-  const likes = await likesRepository.getLikesFromUser(postId, userId);
-  return likes;
-};
-
-export const getLikesFromPost = async (postId: string) => {
-  "use cache";
-  cacheTag(`likes-post-${postId}`);
-  const likes = await likesRepository.getLikesOnPost(postId);
-  return likes;
-};
-
 export const getLikesByCategory = async () => {
   "use cache";
   cacheLife({ revalidate: 3600 });
