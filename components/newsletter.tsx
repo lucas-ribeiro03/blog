@@ -10,10 +10,37 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Send } from "lucide-react";
+import { FormEvent, useState } from "react";
+import { getUserAction } from "@/actions/userActions/getUserAction";
 
 type NewsletterProps = React.ComponentProps<"div">;
 
 export const Newsletter = ({ className, ...props }: NewsletterProps) => {
+  const [email, setEmail] = useState<string>("");
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const user = await getUserAction();
+      if (typeof user === "string") return;
+      const { name, lastName } = user;
+      const response = await fetch("/api/starter-mail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, name, lastName }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data);
+      } else {
+        console.log("ERRO:", data);
+      }
+    } catch (e) {
+      console.log("Erro: ", e);
+    }
+  };
   return (
     <Card className={className} {...props}>
       <CardHeader>
@@ -27,7 +54,7 @@ export const Newsletter = ({ className, ...props }: NewsletterProps) => {
         <CardDescription>Receba notificações sobre novos posts</CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-2">
             <label
               htmlFor="newsletter-email"
@@ -41,6 +68,7 @@ export const Newsletter = ({ className, ...props }: NewsletterProps) => {
                 aria-label="Ícone de email"
               />
               <Input
+                onChange={(e) => setEmail(e.target.value)}
                 id="newsletter-email"
                 type="email"
                 placeholder="seu@email.com"
