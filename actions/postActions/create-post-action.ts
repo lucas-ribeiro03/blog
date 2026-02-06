@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import z from "zod";
 import fs from "fs";
 import path from "path";
+import { cookies } from "next/headers";
 
 const postSchema = z.object({
   title: z.string().min(1),
@@ -92,6 +93,8 @@ export default async function createPostAction(formData: FormData) {
 
   const categoryId = getCategory.id;
 
+  const slug = generateUniqueSlug(title);
+
   await postRepository.createPost({
     title,
     excerpt,
@@ -99,11 +102,40 @@ export default async function createPostAction(formData: FormData) {
     coverImage: imageUrl,
     authorId: authorId.payload.sub,
     id: uuidv4(),
-    slug: generateUniqueSlug(title),
+    slug,
     categoryId,
     createdAt: Date.now(),
     updatedAt: Date.now(),
   });
+  const cookieStore = await cookies();
+  const rawCookie = cookieStore.get("emailSigned")?.value;
+  console.log("rawCookie", rawCookie);
+  if (rawCookie) {
+    const newsletterInfo = JSON.parse(decodeURIComponent(rawCookie || ""));
+
+    console.log("newsletterInfo", newsletterInfo);
+    const res = await fetch("http://localhost:3000/api/new-post-mail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        title,
+        excerpt,
+        slug,
+        email: newsletterInfo.email,
+        name: newsletterInfo.name,
+        lastName: newsletterInfo.lastName,
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      console.log(data);
+    } else {
+      return console.log("ERRO:", data);
+    }
+  }
 
   revalidateTag("posts", "max");
 }
